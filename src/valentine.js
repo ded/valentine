@@ -120,7 +120,7 @@
       } :
       function (obj, iterator, memo, context) {
         !obj && (obj = []);
-        var reversed = (is.arr(obj) ? obj.slice() : v.toArray(obj)).reverse();
+        var reversed = (is.arr(obj) ? obj.slice() : o.toArray(obj)).reverse();
         return iters.reduce(reversed, iterator, memo, context);
       },
 
@@ -161,6 +161,57 @@
       return iters.map(o, function (v) {
         return v[k];
       });
+    },
+
+    compact: function (a) {
+      return iters.filter(a, function (value) {
+        return !!value;
+      });
+    },
+
+    flatten: function (a) {
+      return iters.reduce(a, function (memo, value) {
+        if (o.isArray(value)) {
+          return memo.concat(iters.flatten(value));
+        }
+        memo[memo.length] = value;
+        return memo;
+      }, []);
+    },
+
+    contains: function (obj, target) {
+      var found = false;
+      if (!obj) {
+        return found;
+      }
+      if (nativeIndexOf && obj.indexOf === nativeIndexOf) {
+        return obj.indexOf(target) != -1;
+      }
+      iters.some(obj, function (value) {
+        if (found = value === target) {
+          return true;
+        }
+      });
+      return found;
+    },
+
+    uniq: function (a, isSorted) {
+      return iters.reduce(a, function (memo, el, i) {
+        if (0 === i || (isSorted === true ?
+          iters.last(memo) != el :
+          !iters.contains(memo, el))) {
+          memo[memo.length] = el;
+        }
+        return memo;
+      }, []);
+    },
+
+    first: function (a) {
+      return a[0];
+    },
+
+    last: function (a) {
+      return a[a.length - 1];
     }
   };
 
