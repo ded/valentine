@@ -1,0 +1,13 @@
+{
+  "name": "valentine",
+  "description": "JavaScripts sister.",
+  "version": "0.0.1",
+  "homepage": "https://github.com/ded/valentine",
+  "authors": ["Dustin Diaz <@ded>", "Jacob Thornton <@fat>"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ded/valentine.git"
+  },
+  "main": "./valentine.js",
+  "ender": "./src/ender.js"
+}
