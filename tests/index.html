@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html lang="en-us">
+  <head>
+    <title>Valentine Unit Tests</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="../build/sink/src/sink.css" type="text/css">
+    <script src="../build/sink/src/sink.js"></script>
+    <script src="../src/valentine.js"></script>
+  </head>
+  <body>
+    <h1>Valentine Unit Tests</h1>
+    <ol id="tests"></ol>
+
+    <script>
+      sink('Arrays', function(test, ok, before, after) {
+        test('should pass', 1, function() {
+          ok(true, 'make a note');
+        });
+      });
+      start();
+    </script>
+
+  </body>
+</html>
