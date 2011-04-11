@@ -3,7 +3,8 @@
   var v = {},
       ap = Array.prototype,
       op = Object.prototype,
-      nativ = !!('map' in ap);
+      nativ = !!('map' in ap),
+      nativ18 = !!('reduce' in ap);
 
   var iters = {
     each: nativ ?
@@ -91,7 +92,76 @@
           }
         }
         return -1;
+      },
+    reduce: nativ18 ?
+      function (o, i, m, c) {
+        return ap.reduce.call(o, i, m, c);
+      } :
+      function (obj, iterator, memo, context) {
+        var initial = !is.und(memo);
+        !obj && (obj = []);
+        iters.each(obj, function (value, index, list) {
+          if (!initial && index === 0) {
+            memo = value;
+            initial = true;
+          } else {
+            memo = iterator.call(context, memo, value, index, list);
+          }
+        });
+        if (!initial) {
+          throw new TypeError("Reduce of empty array with no initial value");
+        }
+        return memo;
+      },
+
+    reduceRight: nativ18 ?
+      function (o, i, m, c) {
+        return ap.reduceRight.call(o, i, m, c);
+      } :
+      function (obj, iterator, memo, context) {
+        !obj && (obj = []);
+        var reversed = (is.arr(obj) ? obj.slice() : v.toArray(obj)).reverse();
+        return iters.reduce(reversed, iterator, memo, context);
+      },
+
+    find: function (obj, iterator, context) {
+      var result;
+      iters.some(obj, function (value, index, list) {
+        if (iterator.call(context, value, index, list)) {
+          result = value;
+          return true;
+        }
+      });
+      return result;
+    },
+
+    reject: function (a, fn, scope) {
+      var r = [];
+      for (var i = 0, j = 0, l = a.length; i < l; i++) {
+        if (fn.call(scope, a[i], i, a)) {
+          continue;
+        }
+        r[j++] = a[i];
       }
+      return r;
+    },
+
+    size: function (a) {
+      return o.toArray(a).length;
+    },
+
+    invoke: function (obj, method) {
+      var args = ap.slice.call(arguments, 2);
+      return iters.map(obj, function (value) {
+        return (method ? value[method] : value).apply(value, args);
+      });
+    },
+
+    pluck: function (o, k) {
+      return iters.map(o, function (v) {
+        return v[k];
+      });
+    }
   };
 
   function aug(o, o2) {
@@ -169,6 +239,24 @@
             op.hasOwnProperty.call(a, k) && (r[i++] = fn.call(scope, k, a[k], a));
           }
         }() && r;
+    },
+
+    toArray: function (a) {
+      if (!a) {
+        return [];
+      }
+      if (a.toArray) {
+        return a.toArray();
+      }
+      if (is.arr(a)) {
+        return a;
+      }
+      if (is.args(a)) {
+        return ap.slice.call(a);
+      }
+      return iters.map(a, function (k, v) {
+        return k;
+      });
     }
   };
 
