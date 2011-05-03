@@ -1,5 +1,5 @@
-\  / _. |  _  ._ _|_ o ._   _
- \/ (_| | (/_ | | |_ | | | (/_
+    \  / _. |  _  ._ _|_ o ._   _
+     \/ (_| | (/_ | | |_ | | | (/_
 
 JavaScript's Sister, and protector. At 1.5k Valentine provides you with type checking, functional iterators, and basic utility helpers.
 
