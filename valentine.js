@@ -217,6 +217,12 @@
         return keys;
       },
 
+    values: function (ob) {
+      return o.map(ob, function (k, v) {
+        return v;
+      });
+    },
+
     extend: function (ob) {
       o.each(slice.call(arguments, 1), function (source) {
         for (var prop in source) {

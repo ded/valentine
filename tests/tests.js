@@ -168,8 +168,20 @@ sink('Utility', function (test, ok) {
     }), "a, b, c were keys");
   });
 
+  test('values', 1, function () {
+    var actual = v.values({
+      a: 'foo',
+      b: 'bar',
+      c: 'baz'
+    });
+    var expected = ['foo', 'bar', 'baz'];
+    ok(v.every(actual, function (el, i) {
+      return el == expected[i];
+    }), "foo, bar, baz values were found");
+  });
+
   test('trim', 1, function () {
-    ok(v.trim('  omg bbq wtf  ') === 'omg bbq wtf', 'string was trimmed');
+    ok(v.trim(' \n\r  omg bbq wtf  \n\n ') === 'omg bbq wtf', 'string was trimmed');
   });
 
 });
