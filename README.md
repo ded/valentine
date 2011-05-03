@@ -1,7 +1,19 @@
 \  / _. |  _  ._ _|_ o ._   _
  \/ (_| | (/_ | | |_ | | | (/_
 
-JavaScript's Sister, and protector. Valentine provides you with type checking, functional iterators, and basic utility helpers.
+JavaScript's Sister, and protector. At 1.5k Valentine provides you with type checking, functional iterators, and basic utility helpers.
+
+NPM users, install it:
+
+    $ npm install valentine
+
+Use it:
+
+    var v = require('valentine');
+
+    v.map(['a', 'b', 'c'], function (letter) {
+      return letter.toUpperCase();
+    }).join(' '); // => 'A B C'
 
 API
 ---
@@ -47,3 +59,19 @@ API
   * v.is.nan()
   * v.is.nil()
   * v.is.und()
+
+Ender Support
+-------------
+Don't have [Ender](http://ender.no.de)? Install it, and don't ever look back.
+
+    $ npm install ender -g
+
+Then build valentine into your package
+
+    $ ender build valentine
+
+Have an existing Ender package? Include it:
+
+    $ ender add valentine
+
+Happy iterating!

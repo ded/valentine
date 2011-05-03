@@ -1,1 +1,1 @@
-$.ender(v.noConflict());
+ender.ender(v.noConflict());
