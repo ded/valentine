@@ -1,6 +1,6 @@
 /*!
-  * Valentine: When writing JavaScript, Valentine is your sister.
-  * copyright Dustin Diaz & Jacob Thornton 2011 (@ded @fat)
+  * Valentine: JavaScript's Sister
+  * copyright Dustin Diaz 2011 (@ded)
   * https://github.com/ded/valentine
   * License MIT
   */
@@ -10,8 +10,10 @@
   var v = {},
       ap = Array.prototype,
       op = Object.prototype,
+      slice = ap.slice,
       nativ = !!('map' in ap),
-      nativ18 = !!('reduce' in ap);
+      nativ18 = !!('reduce' in ap),
+      trimReplace = /(^\s*|\s*$)/g;
 
   var iters = {
     each: nativ ?
@@ -74,7 +76,7 @@
       },
     indexOf: nativ ?
       function (a, el, start) {
-        return ap.indexOf.call(a, el, start);
+        return a.indexOf(el, isFinite(start) ? start : 0);
       } :
       function (a, el, start) {
         start = start || 0;
@@ -85,9 +87,10 @@
         }
         return -1;
       },
+
     lastIndexOf: nativ ?
       function (a, el, start) {
-        return ap.lastIndexOf.call(a, el, start);
+        return a.lastIndexOf(el, isFinite(start) ? start : a.length);
       } :
       function (a, el, start) {
         start = start || a.length;
@@ -100,6 +103,7 @@
         }
         return -1;
       },
+
     reduce: nativ18 ?
       function (o, i, m, c) {
         return ap.reduce.call(o, i, m, c);
@@ -125,10 +129,10 @@
       function (o, i, m, c) {
         return ap.reduceRight.call(o, i, m, c);
       } :
-      function (obj, iterator, memo, context) {
-        !obj && (obj = []);
-        var reversed = (is.arr(obj) ? obj.slice() : o.toArray(obj)).reverse();
-        return iters.reduce(reversed, iterator, memo, context);
+      function (ob, i, m, c) {
+        !ob && (ob = []);
+        var reversed = (is.arr(ob) ? ob.slice() : o.toArray(ob)).reverse();
+        return iters.reduce(reversed, i, m, c);
       },
 
     find: function (obj, iterator, context) {
@@ -157,16 +161,9 @@
       return o.toArray(a).length;
     },
 
-    invoke: function (obj, method) {
-      var args = ap.slice.call(arguments, 2);
-      return iters.map(obj, function (value) {
-        return (method ? value[method] : value).apply(value, args);
-      });
-    },
-
-    pluck: function (o, k) {
-      return iters.map(o, function (v) {
-        return v[k];
+    pluck: function (ar, k) {
+      return iters.map(ar, function (el) {
+        return el[k];
       });
     },
 
@@ -178,7 +175,7 @@
 
     flatten: function (a) {
       return iters.reduce(a, function (memo, value) {
-        if (o.isArray(value)) {
+        if (is.arr(value)) {
           return memo.concat(iters.flatten(value));
         }
         memo[memo.length] = value;
@@ -186,31 +183,18 @@
       }, []);
     },
 
-    contains: function (obj, target) {
-      var found = false;
-      if (!obj) {
-        return found;
-      }
-      if (nativeIndexOf && obj.indexOf === nativeIndexOf) {
-        return obj.indexOf(target) != -1;
-      }
-      iters.some(obj, function (value) {
-        if (found = value === target) {
-          return true;
+    uniq: function (ar) {
+      var a = [], i, j;
+      label:
+      for (i = 0; i < ar.length; i++) {
+        for (j = 0; j < a.length; j++) {
+          if (a[j] == ar[i]) {
+            continue label;
+          }
         }
-      });
-      return found;
-    },
-
-    uniq: function (a, isSorted) {
-      return iters.reduce(a, function (memo, el, i) {
-        if (0 === i || (isSorted === true ?
-          iters.last(memo) != el :
-          !iters.contains(memo, el))) {
-          memo[memo.length] = el;
-        }
-        return memo;
-      }, []);
+        a[a.length] = ar[i];
+      }
+      return a;
     },
 
     first: function (a) {
@@ -219,7 +203,37 @@
 
     last: function (a) {
       return a[a.length - 1];
-    }
+    },
+
+    keys: Object.keys ?
+      function (o) {
+        return Object.keys(o);
+      } :
+      function (obj) {
+        var keys = [];
+        for (var key in obj) {
+          op.hasOwnProperty.call(obj, key) && (keys[keys.length] = key);
+        }
+        return keys;
+      },
+
+    extend: function (ob) {
+      o.each(slice.call(arguments, 1), function (source) {
+        for (var prop in source) {
+          !is.und(source[prop]) && (ob[prop] = source[prop]);
+        }
+      });
+      return ob;
+    },
+
+    trim: String.prototype.trim ?
+      function (s) {
+        return s.trim();
+      } :
+      function (s) {
+        return s.replace(trimReplace, '');
+      }
+
   };
 
   function aug(o, o2) {
@@ -310,7 +324,7 @@
         return a;
       }
       if (is.args(a)) {
-        return ap.slice.call(a);
+        return slice.call(a);
       }
       return iters.map(a, function (k, v) {
         return k;

@@ -1,4 +1,4 @@
-require('../build/smoosh').config({
+require('smoosh').config({
   "JAVASCRIPT": {
     "DIST_DIR": "./",
     "valentine": [
@@ -8,8 +8,8 @@ require('../build/smoosh').config({
   },
   "JSHINT_OPTS": {
     "boss": true,
-    "forin": true,
-    "curly": true,
+    "forin": false,
+    "curly": false,
     "debug": false,
     "devel": false,
     "evil": false,

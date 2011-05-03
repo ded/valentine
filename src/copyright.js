@@ -1,6 +1,6 @@
 /*!
-  * Valentine: When writing JavaScript, Valentine is your sister.
-  * copyright Dustin Diaz & Jacob Thornton 2011 (@ded @fat)
+  * Valentine: JavaScript's Sister
+  * copyright Dustin Diaz 2011 (@ded)
   * https://github.com/ded/valentine
   * License MIT
   */

@@ -1,6 +1,7 @@
-Valentine
----------
-JavaScript's Sister.
+\  / _. |  _  ._ _|_ o ._   _
+ \/ (_| | (/_ | | |_ | | | (/_
+
+JavaScript's Sister, and protector. Valentine provides you with type checking, functional iterators, and basic utility helpers.
 
 API
 ---
@@ -21,18 +22,18 @@ API
 
   * v.pluck()
   * v.toArray()
-  * v.invoke()
   * v.size()
   * v.reject()
   * v.find()
-  * v.contains()
   * v.compact()
   * v.flatten()
   * v.uniq()
   * v.first()
   * v.last()
+  * v.keys()
+  * v.trim()
 
-<h2>type checking</h2>
+<h3>type checking</h3>
 
   * v.is.fun()
   * v.is.str()

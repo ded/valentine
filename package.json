@@ -1,9 +1,9 @@
 {
   "name": "valentine",
   "description": "JavaScripts sister.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/ded/valentine",
-  "authors": ["Dustin Diaz <@ded>", "Jacob Thornton <@fat>"],
+  "authors": "Dustin Diaz <@ded>",
   "repository": {
     "type": "git",
     "url": "https://github.com/ded/valentine.git"
