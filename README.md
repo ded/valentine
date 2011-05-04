@@ -44,6 +44,7 @@ API
   * v.last()
   * v.keys()
   * v.trim()
+  * v.bind()
 
 <h3>type checking</h3>
 
@@ -59,6 +60,7 @@ API
   * v.is.nan()
   * v.is.nil()
   * v.is.und()
+  * v.is.obj()
 
 Ender Support
 -------------
@@ -73,5 +75,13 @@ Then build valentine into your package
 Have an existing Ender package? Include it:
 
     $ ender add valentine
+
+Write code like a boss
+
+    var blargh = ['a', ['virus'], 'b', 'c'];
+
+    $.reject(blargh, $.bind(blargh, function (el, i, ar) {
+      return v.is.arr(this[i]);
+    });
 
 Happy iterating!

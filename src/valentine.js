@@ -231,7 +231,13 @@
       } :
       function (s) {
         return s.replace(trimReplace, '');
-      }
+      },
+
+    bind: function (scope, fn) {
+      return function () {
+        fn.apply(scope, arguments);
+      };
+    }
 
   };
 
@@ -289,6 +295,9 @@
     },
     und: function (o) {
       return typeof o === 'undefined';
+    },
+    obj: function (o) {
+      return o instanceof Object && !is.fun(o) && !is.arr(o);
     }
   };
 

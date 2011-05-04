@@ -69,6 +69,16 @@ sink('Arrays', function(test, ok, before, after) {
     }), 'filters out viruses');
   });
 
+  test('reject', 1, function () {
+    var a = v.reject(['a', 'b', 'virus', 'c'], function (el) {
+      return el === 'virus';
+    });
+    var expected = ['a', 'b', 'c'];
+    ok(v.every(expected, function (el, i) {
+      return el == a[i];
+    }), 'filters out viruses');
+  });
+
   test('indexOf', 2, function () {
     ok(v.indexOf(['a', 'b', 'c'], 'b') == 1, 'indexOf b == 1');
     ok(v.indexOf(['x', 'y', 'z'], 'b') == -1, 'indexOf b == -1');
@@ -110,16 +120,6 @@ sink('Utility', function (test, ok) {
 
   test('size', 1, function () {
     ok(v.size(['a', 'b', 'c']) == 3, 'size is 3');
-  });
-
-  test('reject', 1, function () {
-    var a = v.reject(['a', 'b', 'virus', 'c'], function (el) {
-      return el === 'virus';
-    });
-    var expected = ['a', 'b', 'c'];
-    ok(v.every(expected, function (el, i) {
-      return el == a[i];
-    }), 'filters out viruses');
   });
 
   test('find', 1, function () {
@@ -182,6 +182,101 @@ sink('Utility', function (test, ok) {
 
   test('trim', 1, function () {
     ok(v.trim(' \n\r  omg bbq wtf  \n\n ') === 'omg bbq wtf', 'string was trimmed');
+  });
+
+  test('bind', 1, function () {
+    var o = {
+      foo: 'bar'
+    };
+    function wha() {
+      ok(this.foo == 'bar', 'this.foo == "bar"');
+    }
+    var bound = v.bind(o, wha);
+    bound();
+  });
+
+});
+
+sink('Type Checking', function (test, ok) {
+
+  test('String', 3, function () {
+    ok(v.is.str('hello'), 'v.is.str("hello")');
+    ok(v.is.str(''), 'v.is.str("")');
+    ok(!v.is.str(null), '!v.is.str(null)');
+  });
+
+  test('Function', 6, function () {
+    ok(v.is.fun(function () {}), 'function () {}');
+    ok(v.is.fun(Function), 'Function');
+    ok(v.is.fun(new Function), 'new Function');
+    ok(!v.is.fun({}), 'not {}');
+    ok(!v.is.fun([]), 'not []');
+    ok(!v.is.fun(''), 'not ""');
+  });
+
+  test('Array', 4, function () {
+    ok(v.is.arr([]), '[]');
+    ok(v.is.arr(Array(1)), 'Array(1)');
+    ok(v.is.arr(new Array), 'new Array');
+    ok(!v.is.arr(Object), 'not Object');
+  });
+
+  test('Number', 3, function () {
+    ok(v.is.num(1), '1');
+    ok(v.is.num(1.1), '1.1');
+    ok(!v.is.num('1'), '"1"');
+  });
+
+  test('Boolean', 6, function () {
+    ok(v.is.bool(false), 'false');
+    ok(v.is.bool(true), 'true');
+    ok(v.is.bool(!0), '!0');
+    ok(v.is.bool(!!1), '!!1');
+    ok(!v.is.bool('true'), '"true"');
+    ok(!v.is.bool('false'), '"false"');
+  });
+
+  test('Arguments', 1, function () {
+    (function () {
+      ok(v.is.args(arguments), 'arguments');
+    })();
+  });
+
+  test('Empty', 6, function () {
+    ok(v.is.emp({}), '{}');
+    ok(v.is.emp([]), '[]');
+    ok(v.is.emp(''), '""');
+    ok(!v.is.emp({foo:'bar'}), '{foo:bar}');
+    ok(!v.is.emp([1]), '[1]');
+    ok(!v.is.emp('i'), '"i"');
+  });
+
+  test('Date', 1, function () {
+    ok(v.is.dat(new Date), 'new Date');
+  });
+
+  test('RegExp', 2, function () {
+    ok(v.is.reg(/i/), '/i/');
+    ok(v.is.reg(new RegExp("i")), 'new RegExp("i")');
+  });
+
+  test('Null', 3, function () {
+    ok(v.is.nil(null), 'null');
+    ok(!v.is.nil(""), '""');
+    ok(!v.is.nil(), 'undefined');
+  });
+
+  test('Undefined', 3, function () {
+    ok(v.is.und(), 'no args');
+    ok(v.is.und(undefined), 'undefined');
+    ok(!v.is.und(null), 'undefined');
+  });
+
+  test('Object', 4, function () {
+    ok(v.is.obj({}), '{}');
+    ok(v.is.obj(new Object), 'Object');
+    ok(!v.is.obj([]), 'not []');
+    ok(!v.is.obj(function() {}), 'not function(){}');
   });
 
 });
