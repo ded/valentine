@@ -359,6 +359,6 @@
 
   (typeof module !== 'undefined') && module.exports ?
     (module.exports = v) :
-    (context.v = v);
+    (context['v'] = v);
 
 }(this);

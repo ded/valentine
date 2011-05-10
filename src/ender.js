@@ -1,1 +1,1 @@
-ender.ender(v.noConflict());
+ender.ender(v);
