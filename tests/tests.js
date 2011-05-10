@@ -281,4 +281,19 @@ sink('Type Checking', function (test, ok) {
 
 });
 
+sink('OO Style and chaining', function (test, ok) {
+
+  test('method chains', 1, function () {
+    var expected = ['A', 'B', 'C'];
+    var actual = v(['a', 'b', [['c']], 0, false,,,null,['a', 'b', 'c']])
+      .chain().flatten().compact().uniq().map(function (letter) {
+        return letter.toUpperCase();
+      }).value();
+    ok(v.every(actual, function (el, i) {
+      return el == expected[i];
+    }), "all methods chained together");
+  });
+
+});
+
 start();

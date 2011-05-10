@@ -1,6 +1,8 @@
 !function (context) {
 
-  var v = {},
+  var v = function (a, scope) {
+        return new Valentine(a, scope);
+      },
       ap = Array.prototype,
       op = Object.prototype,
       slice = ap.slice,
@@ -31,7 +33,7 @@
       },
     some: nativ ?
       function (a, fn, scope) {
-        return ap.some.call(a, fn, scope);
+        return a.some(fn, scope);
       } :
       function (a, fn, scope) {
         for (var i = 0, l = a.length; i < l; i++) {
@@ -43,7 +45,7 @@
       },
     every: nativ ?
       function (a, fn, scope) {
-        return ap.every.call(a, fn, scope);
+        return a.every(fn, scope);
       } :
       function (a, fn, scope) {
         for (var i = 0, l = a.length; i < l; i++) {
@@ -55,7 +57,7 @@
       },
     filter: nativ ?
       function (a, fn, scope) {
-        return ap.filter.call(a, fn, scope);
+        return a.filter(fn, scope);
       } :
       function (a, fn, scope) {
         var r = [];
@@ -154,8 +156,8 @@
       return o.toArray(a).length;
     },
 
-    pluck: function (ar, k) {
-      return iters.map(ar, function (el) {
+    pluck: function (a, k) {
+      return iters.map(a, function (el) {
         return el[k];
       });
     },
@@ -188,6 +190,119 @@
         a[a.length] = ar[i];
       }
       return a;
+    }
+
+  };
+
+  function aug(o, o2) {
+    for (var k in o2) {
+      o[k] = o2[k];
+    }
+  }
+
+  var is = {
+    fun: function (f) {
+      return typeof f === 'function';
+    },
+
+    str: function (s) {
+      return typeof s === 'string';
+    },
+
+    ele: function (el) {
+      !!(el && el.nodeType && el.nodeType == 1);
+    },
+
+    arr: function (ar) {
+      return ar instanceof Array;
+    },
+
+    num: function (n) {
+      return typeof n === 'number';
+    },
+
+    bool: function (b) {
+      return (b === true) || (b === false);
+    },
+
+    args: function (a) {
+      return !!(a && op.hasOwnProperty.call(a, 'callee'));
+    },
+
+    emp: function (o) {
+      var i = 0;
+      return is.arr(o) ? o.length === 0 :
+        is.obj(o) ? (function () {
+          for (var k in o) {
+            i++;
+            break;
+          }
+          return (i === 0);
+        }()) :
+        o === '';
+    },
+
+    dat: function (d) {
+      return !!(d && d.getTimezoneOffset && d.setUTCFullYear);
+    },
+
+    reg: function (r) {
+      return !!(r && r.test && r.exec && (r.ignoreCase || r.ignoreCase === false));
+    },
+
+    nan: function (n) {
+      return n !== n;
+    },
+
+    nil: function (o) {
+      return o === null;
+    },
+
+    und: function (o) {
+      return typeof o === 'undefined';
+    },
+
+    obj: function (o) {
+      return o instanceof Object && !is.fun(o) && !is.arr(o);
+    }
+  };
+
+  var o = {
+    each: function (a, fn, scope) {
+      is.arr(a) ?
+        iters.each(a, fn, scope) : (function () {
+          for (var k in a) {
+            op.hasOwnProperty.call(a, k) && fn.call(scope, k, a[k], a);
+          }
+        }());
+    },
+
+    map: function (a, fn, scope) {
+      var r = [], i = 0;
+      return is.arr(a) ?
+        iters.map(a, fn, scope) : !function () {
+          for (var k in a) {
+            op.hasOwnProperty.call(a, k) && (r[i++] = fn.call(scope, k, a[k], a));
+          }
+        }() && r;
+    },
+
+    toArray: function (a) {
+      if (!a) {
+        return [];
+      }
+      if (a.toArray) {
+        return a.toArray();
+      }
+      if (is.arr(a)) {
+        return a;
+      }
+      if (is.args(a)) {
+        return slice.call(a);
+      }
+      return iters.map(a, function (k) {
+        return k;
+      });
     },
 
     first: function (a) {
@@ -241,108 +356,39 @@
 
   };
 
-  function aug(o, o2) {
-    for (var k in o2) {
-      o[k] = o2[k];
-    }
-  }
-
-  var is = {
-    fun: function (f) {
-      return typeof f === 'function';
-    },
-    str: function (s) {
-      return typeof s === 'string';
-    },
-    ele: function (el) {
-      !!(el && el.nodeType && el.nodeType == 1);
-    },
-    arr: function (ar) {
-      return ar instanceof Array;
-    },
-    num: function (n) {
-      return typeof n === 'number';
-    },
-    bool: function (b) {
-      return (b === true) || (b === false);
-    },
-    args: function (a) {
-      return !!(a && op.hasOwnProperty.call(a, 'callee'));
-    },
-    emp: function (o) {
-      var i = 0;
-      return is.arr(o) ? o.length === 0 :
-        is.obj(o) ? (function () {
-          for (var k in o) {
-            i++;
-            break;
-          }
-          return (i === 0);
-        }()) :
-        o === '';
-    },
-    dat: function (d) {
-      return !!(d && d.getTimezoneOffset && d.setUTCFullYear);
-    },
-    reg: function (r) {
-      return !!(r && r.test && r.exec && (r.ignoreCase || r.ignoreCase === false));
-    },
-    nan: function (n) {
-      return n !== n;
-    },
-    nil: function (o) {
-      return o === null;
-    },
-    und: function (o) {
-      return typeof o === 'undefined';
-    },
-    obj: function (o) {
-      return o instanceof Object && !is.fun(o) && !is.arr(o);
-    }
-  };
-
-  var o = {
-    each: function (a, fn, scope) {
-      is.arr(a) ?
-        iters.each(a, fn, scope) : (function () {
-          for (var k in a) {
-            op.hasOwnProperty.call(a, k) && fn.call(scope, k, a[k], a);
-          }
-        }());
-    },
-
-    map: function (a, fn, scope) {
-      var r = [], i = 0;
-      return is.arr(a) ?
-        iters.map(a, fn, scope) : !function () {
-          for (var k in a) {
-            op.hasOwnProperty.call(a, k) && (r[i++] = fn.call(scope, k, a[k], a));
-          }
-        }() && r;
-    },
-
-    toArray: function (a) {
-      if (!a) {
-        return [];
-      }
-      if (a.toArray) {
-        return a.toArray();
-      }
-      if (is.arr(a)) {
-        return a;
-      }
-      if (is.args(a)) {
-        return slice.call(a);
-      }
-      return iters.map(a, function (k, v) {
-        return k;
-      });
-    }
-  };
-
   aug(v, iters);
   aug(v, o);
   v.is = is;
+
+  // love thyself
+  v.v = v;
+
+  // peoples like the object style
+  var Valentine = function (a, scope) {
+    this.val = a;
+    this._scope = scope || null;
+    this._chained = 0;
+  };
+
+  v.each(v.extend({}, iters, o), function (name, fn) {
+    Valentine.prototype[name] = function () {
+      var a = v.toArray(arguments);
+      a.unshift(this.val);
+      var ret = fn.apply(this._scope, a);
+      this.val = ret;
+      return this._chained ? this : ret;
+    };
+  });
+
+  // back compact to underscore (peoples like chaining)
+  Valentine.prototype.chain = function () {
+    this._chained = 1;
+    return this;
+  };
+
+  Valentine.prototype.value = function () {
+    return this.val;
+  };
 
   var old = context.v;
   v.noConflict = function () {

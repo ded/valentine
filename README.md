@@ -9,11 +9,13 @@ NPM users, install it:
 
 Use it:
 
-    var v = require('valentine');
+``` js
+var v = require('valentine');
 
-    v.map(['a', 'b', 'c'], function (letter) {
-      return letter.toUpperCase();
-    }).join(' '); // => 'A B C'
+v.map(['a', 'b', 'c'], function (letter) {
+  return letter.toUpperCase();
+}).join(' '); // => 'A B C'
+```
 
 API
 ---
@@ -62,6 +64,25 @@ API
   * v.is.und()
   * v.is.obj()
 
+Object Style
+------
+
+``` js
+v(['a', 'b', 'c']).map(function (letter) {
+  return letter.toUpperCase();
+}); // => ['A', 'B', 'C'];
+```
+
+Chains
+------
+
+``` js
+v(['a', 'b', [['c']], 0, false,,,null,['a', 'b', 'c']])
+  .chain().flatten().compact().uniq().map(function (letter) {
+    return letter.toUpperCase();
+  }).value(); // => ['A', 'B', 'C'];
+```
+
 Ender Support
 -------------
 Don't have [Ender](http://ender.no.de)? Install it, and don't ever look back.
@@ -78,10 +99,10 @@ Have an existing Ender package? Include it:
 
 Write code like a boss
 
-    var blargh = ['a', ['virus'], 'b', 'c'];
-
-    $.reject(blargh, $.bind(blargh, function (el, i, ar) {
-      return v.is.arr(this[i]);
-    });
+``` js
+$.v(['a', ['virus'], 'b', 'c']).reject(function (el, i) {
+  return v.is.arr(el[i]);
+});
+```
 
 Happy iterating!
