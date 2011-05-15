@@ -6,8 +6,8 @@
       ap = Array.prototype,
       op = Object.prototype,
       slice = ap.slice,
-      nativ = !!('map' in ap),
-      nativ18 = !!('reduce' in ap),
+      nativ = 'map' in ap,
+      nativ18 = 'reduce' in ap,
       trimReplace = /(^\s*|\s*$)/g;
 
   var iters = {
@@ -17,7 +17,7 @@
       } :
       function (a, fn, scope) {
         for (var i = 0, l = a.length; i < l; i++) {
-          fn.call(scope, a[i], i, a);
+          i in a && fn.call(scope, a[i], i, a);
         }
       },
     map: nativ ?
@@ -27,7 +27,7 @@
       function (a, fn, scope) {
         var r = [];
         for (var i = 0, l = a.length; i < l; i++) {
-          r[i] = fn.call(scope, a[i], i, a);
+          i in a && (r[i] = fn.call(scope, a[i], i, a));
         }
         return r;
       },
@@ -37,7 +37,7 @@
       } :
       function (a, fn, scope) {
         for (var i = 0, l = a.length; i < l; i++) {
-          if (fn.call(scope, a[i], i, a)) {
+          if (i in a && fn.call(scope, a[i], i, a)) {
             return true;
           }
         }
@@ -49,7 +49,7 @@
       } :
       function (a, fn, scope) {
         for (var i = 0, l = a.length; i < l; i++) {
-          if (!fn.call(scope, a[i], i, a)) {
+          if (i in a && !fn.call(scope, a[i], i, a)) {
             return false;
           }
         }
@@ -62,10 +62,12 @@
       function (a, fn, scope) {
         var r = [];
         for (var i = 0, j = 0, l = a.length; i < l; i++) {
-          if (!fn.call(scope, a[i], i, a)) {
-            continue;
+          if (i in a) {
+            if (!fn.call(scope, a[i], i, a)) {
+              continue;
+            }
+            r[j++] = a[i];
           }
-          r[j++] = a[i];
         }
         return r;
       },
@@ -76,7 +78,7 @@
       function (a, el, start) {
         start = start || 0;
         for (var i = 0; i < a.length; i++) {
-          if (a[i] === el) {
+          if (i in a && a[i] === el) {
             return i;
           }
         }
@@ -92,7 +94,7 @@
         start = start >= a.length ? a.length :
           start < 0 ? a.length + start : start;
         for (var i = start; i >= 0; --i) {
-          if (a[i] === el) {
+          if (i in a && a[i] === el) {
             return i;
           }
         }
@@ -144,10 +146,12 @@
     reject: function (a, fn, scope) {
       var r = [];
       for (var i = 0, j = 0, l = a.length; i < l; i++) {
-        if (fn.call(scope, a[i], i, a)) {
-          continue;
+        if (i in a) {
+          if (fn.call(scope, a[i], i, a)) {
+            continue;
+          }
+          r[j++] = a[i];
         }
-        r[j++] = a[i];
       }
       return r;
     },
