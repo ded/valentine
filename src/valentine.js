@@ -3,8 +3,8 @@
   var v = function (a, scope) {
         return new Valentine(a, scope);
       },
-      ap = Array.prototype,
-      op = Object.prototype,
+      ap = [],
+      op = {},
       slice = ap.slice,
       nativ = 'map' in ap,
       nativ18 = 'reduce' in ap,
@@ -222,7 +222,12 @@
     },
     
     arrLike: function (ar) {
-      return this.arr(ar) || (ar && ar.length && isFinite(ar.length));
+      var length;
+      if (ar) {
+        length = ar.length;
+        return this.arr(ar) || length > 0 && isFinite(length) && +length === length;
+      }
+      return false;
     },
 
     num: function (n) {
