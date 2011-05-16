@@ -10,8 +10,8 @@
   var v = function (a, scope) {
         return new Valentine(a, scope);
       },
-      ap = Array.prototype,
-      op = Object.prototype,
+      ap = [],
+      op = {},
       slice = ap.slice,
       nativ = 'map' in ap,
       nativ18 = 'reduce' in ap,
@@ -113,18 +113,23 @@
         return ap.reduce.call(o, i, m, c);
       } :
       function (obj, iterator, memo, context) {
-        var initial = !is.und(memo);
         !obj && (obj = []);
-        iters.each(obj, function (value, index, list) {
-          if (!initial && index === 0) {
-            memo = value;
-            initial = true;
-          } else {
-            memo = iterator.call(context, memo, value, index, list);
+        var i = 0, l = obj.length;
+        if (arguments.length < 3) {
+          do {
+            if (i in obj) {
+              memo = obj[i++];
+              break;
+            }
+            if (++i >= l) {
+              throw new TypeError('Empty array');
+            }
+          } while (1);
+        }
+        for (; i < l; i++) {
+          if (i in obj) {
+            memo = iterator.call(context, memo, obj[i], i, obj);
           }
-        });
-        if (!initial) {
-          throw new TypeError("Reduce of empty array with no initial value");
         }
         return memo;
       },
@@ -133,10 +138,26 @@
       function (o, i, m, c) {
         return ap.reduceRight.call(o, i, m, c);
       } :
-      function (ob, i, m, c) {
-        !ob && (ob = []);
-        var reversed = (is.arr(ob) ? ob.slice() : o.toArray(ob)).reverse();
-        return iters.reduce(reversed, i, m, c);
+      function (obj, iterator, memo, context) {
+        !obj && (obj = []);
+        var l = obj.length, i = l - 1;
+        if (arguments.length < 3) {
+          do {
+            if (i in obj) {
+              memo = obj[i--];
+              break;
+            }
+            if (--i < 0) {
+              throw new TypeError('Empty array');
+            }
+          } while (1);
+        }
+        for (; i >= 0; i--) {
+          if (i in obj) {
+            memo = iterator.call(context, memo, obj[i], i, obj);
+          }
+        }
+        return memo;
       },
 
     find: function (obj, iterator, context) {

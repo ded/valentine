@@ -243,12 +243,7 @@
     },
     
     arrLike: function (ar) {
-      var length;
-      if (ar) {
-        length = ar.length;
-        return this.arr(ar) || length > 0 && isFinite(length) && +length === length;
-      }
-      return false;
+      return this.arr(ar) || (ar && ar.length && isFinite(ar.length));
     },
 
     num: function (n) {
