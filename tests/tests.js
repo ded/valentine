@@ -296,4 +296,12 @@ sink('OO Style and chaining', function (test, ok) {
 
 });
 
+sink('Funny business', function (test, ok) {
+  test('can call each on nodeList', 1, function () {
+    v.each(document.getElementsByTagName('body'), function (el) {
+      ok(el.tagName.match(/body/i), 'element was found by each() iteration');
+    })
+  })
+})
+
 start();

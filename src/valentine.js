@@ -220,6 +220,10 @@
     arr: function (ar) {
       return ar instanceof Array;
     },
+    
+    arrLike: function (ar) {
+      return this.arr(ar) || (ar && ar.length && isFinite(ar.length));
+    },
 
     num: function (n) {
       return typeof n === 'number';
@@ -273,7 +277,7 @@
 
   var o = {
     each: function (a, fn, scope) {
-      is.arr(a) ?
+      is.arrLike(a) ?
         iters.each(a, fn, scope) : (function () {
           for (var k in a) {
             op.hasOwnProperty.call(a, k) && fn.call(scope, k, a[k], a);
