@@ -1,6 +1,6 @@
 {
   "name": "valentine",
-  "description": "JavaScripts sister.",
+  "description": "JavaScripts Functional Sister. Utilitiy, Iterators, type checking",
   "version": "1.1.2",
   "homepage": "https://github.com/ded/valentine",
   "authors": "Dustin Diaz <@ded>",
@@ -8,6 +8,7 @@
     "type": "git",
     "url": "https://github.com/ded/valentine.git"
   },
+  "keywords": ["ender", "functional", "iteration", "type checking", "base"],
   "main": "./valentine.js",
   "ender": "./src/ender.js"
 }
