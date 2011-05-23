@@ -103,7 +103,7 @@ Write code like a boss
 
 ``` js
 $.v(['a', ['virus'], 'b', 'c']).reject(function (el, i) {
-  return v.is.arr(el[i]);
+  return $.is.arr(el[i]);
 });
 ```
 
