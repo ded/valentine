@@ -12,7 +12,7 @@ Use it:
 ``` js
 var v = require('valentine');
 
-v.map(['a', 'b', 'c'], function (letter) {
+v(['a', 'b', 'c']).map(function (letter) {
   return letter.toUpperCase();
 }).join(' '); // => 'A B C'
 ```
@@ -45,6 +45,7 @@ API
   * v.first()
   * v.last()
   * v.keys()
+  * v.values()
   * v.trim()
   * v.bind()
 
@@ -54,6 +55,7 @@ API
   * v.is.str()
   * v.is.ele()
   * v.is.arr()
+  * v.is.arrLike()
   * v.is.num()
   * v.is.bool()
   * v.is.args()
@@ -105,4 +107,4 @@ $.v(['a', ['virus'], 'b', 'c']).reject(function (el, i) {
 });
 ```
 
-Happy iterating!
+*Happy iterating*!

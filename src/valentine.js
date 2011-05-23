@@ -25,8 +25,8 @@
         return ap.map.call(a, fn, scope);
       } :
       function (a, fn, scope) {
-        var r = [];
-        for (var i = 0, l = a.length; i < l; i++) {
+        var r = [], i;
+        for (i = 0, l = a.length; i < l; i++) {
           i in a && (r[i] = fn.call(scope, a[i], i, a));
         }
         return r;
@@ -241,7 +241,7 @@
     arr: function (ar) {
       return ar instanceof Array;
     },
-    
+
     arrLike: function (ar) {
       return (ar && ar.length && isFinite(ar.length));
     },
@@ -308,7 +308,7 @@
 
     map: function (a, fn, scope) {
       var r = [], i = 0;
-      return is.arr(a) ?
+      return is.arrLike(a) ?
         iters.map(a, fn, scope) : !function () {
           for (var k in a) {
             op.hasOwnProperty.call(a, k) && (r[i++] = fn.call(scope, k, a[k], a));
