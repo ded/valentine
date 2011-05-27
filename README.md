@@ -3,7 +3,18 @@
 
 JavaScript's Sister, and protector. At 1.5k Valentine provides you with type checking, functional iterators, and basic utility helpers.
 
-NPM users, install it:
+Browser usage:
+
+``` html
+<script src="valentine.js"></script>
+<script>
+  v.forEach(['a', 'b', 'c'], function (letter) {
+
+  })
+</script>
+```
+
+Node users, install it:
 
     $ npm install valentine
 
@@ -12,6 +23,7 @@ Use it:
 ``` js
 var v = require('valentine');
 
+// showcase object style
 v(['a', 'b', 'c']).map(function (letter) {
   return letter.toUpperCase();
 }).join(' '); // => 'A B C'
@@ -89,7 +101,7 @@ Ender Support
 -------------
 Don't have [Ender](http://ender.no.de)? Install it, and don't ever look back.
 
-    $ npm install ender -g
+    $ [sudo] npm install ender -g
 
 Then build valentine into your package
 
