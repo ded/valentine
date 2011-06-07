@@ -148,6 +148,23 @@ sink('Utility', function (test, ok) {
     }), "turned ['a', 'a', 'a', 'b', 'b', 'c'] into ['a', 'b', 'c']");
   });
 
+  test('merge', 2, function () {
+    // object style
+    var actual = v(['a', 'b', 'c']).merge(['e', 'f', 'g']);
+    var expected = ['a', 'b', 'c', 'e', 'f', 'g'];
+
+    ok(v.every(expected, function (el, i) {
+      return el == actual[i];
+    }), "merged ['a', 'b', 'c'] and ['d', 'e', 'f']");
+
+    // functional style
+    actual = v.merge(['a', 'b', 'c'], ['e', 'f', 'g']);
+    ok(v.every(expected, function (el, i) {
+      return el == actual[i];
+    }), "merged ['a', 'b', 'c'] and ['d', 'e', 'f']");
+
+  })
+
   test('first', 1, function () {
     ok(v.first(['a', 'b', 'c']) == 'a', 'a is first');
   });

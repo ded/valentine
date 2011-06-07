@@ -215,6 +215,21 @@
         a[a.length] = ar[i];
       }
       return a;
+    },
+
+    merge: function (one, two) {
+      var i = one.length, j = 0, l;
+      if (isFinite(two.length)) {
+        for (l = two.length; j < l; j++) {
+          one[i++] = two[j];
+        }
+      } else {
+        while (two[j] !== undefined) {
+          first[i++] = second[j++];
+        }
+      }
+      one.length = i;
+      return one;
     }
 
   };
