@@ -1,7 +1,7 @@
     \  / _. |  _  ._ _|_ o ._   _
      \/ (_| | (/_ | | |_ | | | (/_
 
-JavaScript's Sister, and protector. At 1.5k Valentine provides you with type checking, functional iterators, and basic utility helpers.
+JavaScript's Sister, and protector — providing you with type checking, functional iterators, and common utility helpers; utilizing native JavaScript methods (when available) for optimal speed.
 
 Browser usage:
 
@@ -34,49 +34,51 @@ API
 
 <h3>iterators</h3>
 
-  * v.each()
-  * v.map()
-  * v.every()
-  * v.some()
-  * v.filter()
-  * v.indexOf()
-  * v.lastIndexOf()
-  * v.reduce()
-  * v.reduceRight()
+  * v.each(ar || obj, callback[, scope])
+  * v.map(ar || obj, callback[, scope])
+  * v.every(ar, callback[, scope])
+  * v.some(ar, callback[, scope])
+  * v.filter(ar, callback[, scope])
+  * v.reject(ar, callback[, scope])
+  * v.indexOf(ar, item[, start])
+  * v.lastIndexOf(ar, item[, start])
+  * v.reduce(ar, callback, memo[, scope])
+  * v.reduceRight(ar, callback, memo[, scope])
 
 <h3>utility</h3>
 
-  * v.pluck()
-  * v.toArray()
-  * v.size()
-  * v.reject()
-  * v.find()
-  * v.compact()
-  * v.flatten()
-  * v.uniq()
-  * v.first()
-  * v.last()
-  * v.keys()
-  * v.values()
-  * v.trim()
-  * v.bind()
+  * v.extend(obj[, obj2[, obj3[...]]])
+  * v.merge(ar1, ar2)
+  * v.pluck(ar, key)
+  * v.toArray(sparse)
+  * v.size(ar)
+  * v.find(ar, key)
+  * v.compact(ar)
+  * v.flatten(ar)
+  * v.uniq(ar)
+  * v.first(ar)
+  * v.last(ar)
+  * v.keys(obj)
+  * v.values(obj)
+  * v.trim(str)
+  * v.bind(scope, fn)
 
 <h3>type checking</h3>
 
-  * v.is.fun()
-  * v.is.str()
-  * v.is.ele()
-  * v.is.arr()
-  * v.is.arrLike()
-  * v.is.num()
-  * v.is.bool()
-  * v.is.args()
-  * v.is.emp()
-  * v.is.dat()
-  * v.is.nan()
-  * v.is.nil()
-  * v.is.und()
-  * v.is.obj()
+  * v.is.fun(o)
+  * v.is.str(o)
+  * v.is.ele(o)
+  * v.is.arr(o)
+  * v.is.arrLike(o)
+  * v.is.num(o)
+  * v.is.bool(o)
+  * v.is.args(o)
+  * v.is.emp(o)
+  * v.is.dat(o)
+  * v.is.nan(o)
+  * v.is.nil(o)
+  * v.is.und(o)
+  * v.is.obj(o)
 
 Object Style
 ------
@@ -117,6 +119,17 @@ Write code like a boss
 $.v(['a', ['virus'], 'b', 'c']).reject(function (el, i) {
   return $.is.arr(el[i]);
 });
+
+// top level methods in bridge
+$.each
+  map
+  merge
+  extend
+  toArray
+  keys
+  values
+  trim
+  bind
 ```
 
 *Happy iterating*!
