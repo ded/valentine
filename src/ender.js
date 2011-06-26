@@ -1,3 +1,4 @@
+var v = require('valentine');
 ender.ender(v);
 ender.ender({
   merge: v.merge,
