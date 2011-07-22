@@ -62,6 +62,27 @@ API
   * v.values(obj)
   * v.trim(str)
   * v.bind(scope, fn)
+  * v.parallel([fn args])
+
+``` js
+v.parallel(
+  function (fn) {
+    getTimeline(function (e, timeline) {
+      fn(e, timeline)
+    })
+  }
+, function (fn) {
+    getUser(function (e, user) {
+      fn(e, user)
+    })
+  }
+, function (e, timeline, user) {
+    if (e) return console.log(e)
+    ok(timeline == 'one', 'first result is "one"')
+    ok(user == 'two', 'second result is "two"')
+  }
+)
+```
 
 <h3>type checking</h3>
 
