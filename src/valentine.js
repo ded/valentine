@@ -8,97 +8,97 @@
       slice = ap.slice,
       nativ = 'map' in ap,
       nativ18 = 'reduce' in ap,
-      trimReplace = /(^\s*|\s*$)/g;
+      trimReplace = /(^\s*|\s*$)/g
 
   var iters = {
     each: nativ ?
       function (a, fn, scope) {
-        ap.forEach.call(a, fn, scope);
+        ap.forEach.call(a, fn, scope)
       } :
       function (a, fn, scope) {
         for (var i = 0, l = a.length; i < l; i++) {
-          i in a && fn.call(scope, a[i], i, a);
+          i in a && fn.call(scope, a[i], i, a)
         }
       },
     map: nativ ?
       function (a, fn, scope) {
-        return ap.map.call(a, fn, scope);
+        return ap.map.call(a, fn, scope)
       } :
       function (a, fn, scope) {
-        var r = [], i;
+        var r = [], i
         for (i = 0, l = a.length; i < l; i++) {
-          i in a && (r[i] = fn.call(scope, a[i], i, a));
+          i in a && (r[i] = fn.call(scope, a[i], i, a))
         }
-        return r;
+        return r
       },
     some: nativ ?
       function (a, fn, scope) {
-        return a.some(fn, scope);
+        return a.some(fn, scope)
       } :
       function (a, fn, scope) {
         for (var i = 0, l = a.length; i < l; i++) {
           if (i in a && fn.call(scope, a[i], i, a)) {
-            return true;
+            return true
           }
         }
-        return false;
+        return false
       },
     every: nativ ?
       function (a, fn, scope) {
-        return a.every(fn, scope);
+        return a.every(fn, scope)
       } :
       function (a, fn, scope) {
         for (var i = 0, l = a.length; i < l; i++) {
           if (i in a && !fn.call(scope, a[i], i, a)) {
-            return false;
+            return false
           }
         }
-        return true;
+        return true
       },
     filter: nativ ?
       function (a, fn, scope) {
-        return a.filter(fn, scope);
+        return a.filter(fn, scope)
       } :
       function (a, fn, scope) {
-        var r = [];
+        var r = []
         for (var i = 0, j = 0, l = a.length; i < l; i++) {
           if (i in a) {
             if (!fn.call(scope, a[i], i, a)) {
-              continue;
+              continue
             }
-            r[j++] = a[i];
+            r[j++] = a[i]
           }
         }
-        return r;
+        return r
       },
     indexOf: nativ ?
       function (a, el, start) {
-        return a.indexOf(el, isFinite(start) ? start : 0);
+        return a.indexOf(el, isFinite(start) ? start : 0)
       } :
       function (a, el, start) {
-        start = start || 0;
+        start = start || 0
         for (var i = 0; i < a.length; i++) {
           if (i in a && a[i] === el) {
-            return i;
+            return i
           }
         }
-        return -1;
+        return -1
       },
 
     lastIndexOf: nativ ?
       function (a, el, start) {
-        return a.lastIndexOf(el, isFinite(start) ? start : a.length);
+        return a.lastIndexOf(el, isFinite(start) ? start : a.length)
       } :
       function (a, el, start) {
-        start = start || a.length;
+        start = start || a.length
         start = start >= a.length ? a.length :
-          start < 0 ? a.length + start : start;
+          start < 0 ? a.length + start : start
         for (var i = start; i >= 0; --i) {
           if (i in a && a[i] === el) {
-            return i;
+            return i
           }
         }
-        return -1;
+        return -1
       },
 
     reduce: nativ18 ?
@@ -106,210 +106,210 @@
         return ap.reduce.call(o, i, m, c);
       } :
       function (obj, iterator, memo, context) {
-        !obj && (obj = []);
-        var i = 0, l = obj.length;
+        if (!obj) obj = []
+        var i = 0, l = obj.length
         if (arguments.length < 3) {
           do {
             if (i in obj) {
-              memo = obj[i++];
-              break;
+              memo = obj[i++]
+              break
             }
             if (++i >= l) {
-              throw new TypeError('Empty array');
+              throw new TypeError('Empty array')
             }
-          } while (1);
+          } while (1)
         }
         for (; i < l; i++) {
           if (i in obj) {
-            memo = iterator.call(context, memo, obj[i], i, obj);
+            memo = iterator.call(context, memo, obj[i], i, obj)
           }
         }
-        return memo;
+        return memo
       },
 
     reduceRight: nativ18 ?
       function (o, i, m, c) {
-        return ap.reduceRight.call(o, i, m, c);
+        return ap.reduceRight.call(o, i, m, c)
       } :
       function (obj, iterator, memo, context) {
-        !obj && (obj = []);
-        var l = obj.length, i = l - 1;
+        !obj && (obj = [])
+        var l = obj.length, i = l - 1
         if (arguments.length < 3) {
           do {
             if (i in obj) {
-              memo = obj[i--];
-              break;
+              memo = obj[i--]
+              break
             }
             if (--i < 0) {
-              throw new TypeError('Empty array');
+              throw new TypeError('Empty array')
             }
-          } while (1);
+          } while (1)
         }
         for (; i >= 0; i--) {
           if (i in obj) {
-            memo = iterator.call(context, memo, obj[i], i, obj);
+            memo = iterator.call(context, memo, obj[i], i, obj)
           }
         }
-        return memo;
+        return memo
       },
 
     find: function (obj, iterator, context) {
-      var result;
+      var result
       iters.some(obj, function (value, index, list) {
         if (iterator.call(context, value, index, list)) {
-          result = value;
-          return true;
+          result = value
+          return true
         }
-      });
-      return result;
+      })
+      return result
     },
 
     reject: function (a, fn, scope) {
-      var r = [];
+      var r = []
       for (var i = 0, j = 0, l = a.length; i < l; i++) {
         if (i in a) {
           if (fn.call(scope, a[i], i, a)) {
-            continue;
+            continue
           }
-          r[j++] = a[i];
+          r[j++] = a[i]
         }
       }
-      return r;
+      return r
     },
 
     size: function (a) {
-      return o.toArray(a).length;
+      return o.toArray(a).length
     },
 
     pluck: function (a, k) {
       return iters.map(a, function (el) {
-        return el[k];
-      });
+        return el[k]
+      })
     },
 
     compact: function (a) {
       return iters.filter(a, function (value) {
-        return !!value;
-      });
+        return !!value
+      })
     },
 
     flatten: function (a) {
       return iters.reduce(a, function (memo, value) {
         if (is.arr(value)) {
-          return memo.concat(iters.flatten(value));
+          return memo.concat(iters.flatten(value))
         }
-        memo[memo.length] = value;
-        return memo;
-      }, []);
+        memo[memo.length] = value
+        return memo
+      }, [])
     },
 
     uniq: function (ar) {
-      var a = [], i, j;
+      var a = [], i, j
       label:
       for (i = 0; i < ar.length; i++) {
         for (j = 0; j < a.length; j++) {
           if (a[j] == ar[i]) {
-            continue label;
+            continue label
           }
         }
-        a[a.length] = ar[i];
+        a[a.length] = ar[i]
       }
-      return a;
+      return a
     },
 
     merge: function (one, two) {
-      var i = one.length, j = 0, l;
+      var i = one.length, j = 0, l
       if (isFinite(two.length)) {
         for (l = two.length; j < l; j++) {
-          one[i++] = two[j];
+          one[i++] = two[j]
         }
       } else {
         while (two[j] !== undefined) {
-          first[i++] = second[j++];
+          first[i++] = second[j++]
         }
       }
-      one.length = i;
-      return one;
+      one.length = i
+      return one
     }
 
   };
 
   function aug(o, o2) {
     for (var k in o2) {
-      o[k] = o2[k];
+      o[k] = o2[k]
     }
   }
 
   var is = {
     fun: function (f) {
-      return typeof f === 'function';
+      return typeof f === 'function'
     },
 
     str: function (s) {
-      return typeof s === 'string';
+      return typeof s === 'string'
     },
 
     ele: function (el) {
-      !!(el && el.nodeType && el.nodeType == 1);
+      !!(el && el.nodeType && el.nodeType == 1)
     },
 
     arr: function (ar) {
-      return ar instanceof Array;
+      return ar instanceof Array
     },
 
     arrLike: function (ar) {
-      return (ar && ar.length && isFinite(ar.length));
+      return (ar && ar.length && isFinite(ar.length))
     },
 
     num: function (n) {
-      return typeof n === 'number';
+      return typeof n === 'number'
     },
 
     bool: function (b) {
-      return (b === true) || (b === false);
+      return (b === true) || (b === false)
     },
 
     args: function (a) {
-      return !!(a && op.hasOwnProperty.call(a, 'callee'));
+      return !!(a && op.hasOwnProperty.call(a, 'callee'))
     },
 
     emp: function (o) {
-      var i = 0;
+      var i = 0
       return is.arr(o) ? o.length === 0 :
         is.obj(o) ? (function () {
           for (var k in o) {
-            i++;
-            break;
+            i++
+            break
           }
-          return (i === 0);
+          return (i === 0)
         }()) :
-        o === '';
+        o === ''
     },
 
     dat: function (d) {
-      return !!(d && d.getTimezoneOffset && d.setUTCFullYear);
+      return !!(d && d.getTimezoneOffset && d.setUTCFullYear)
     },
 
     reg: function (r) {
-      return !!(r && r.test && r.exec && (r.ignoreCase || r.ignoreCase === false));
+      return !!(r && r.test && r.exec && (r.ignoreCase || r.ignoreCase === false))
     },
 
     nan: function (n) {
-      return n !== n;
+      return n !== n
     },
 
     nil: function (o) {
-      return o === null;
+      return o === null
     },
 
     und: function (o) {
-      return typeof o === 'undefined';
+      return typeof o === 'undefined'
     },
 
     obj: function (o) {
-      return o instanceof Object && !is.fun(o) && !is.arr(o);
+      return o instanceof Object && !is.fun(o) && !is.arr(o)
     }
-  };
+  }
 
   var o = {
     each: function (a, fn, scope) {
@@ -318,130 +318,125 @@
           for (var k in a) {
             op.hasOwnProperty.call(a, k) && fn.call(scope, k, a[k], a);
           }
-        }());
+        }())
     },
 
     map: function (a, fn, scope) {
-      var r = [], i = 0;
+      var r = [], i = 0
       return is.arrLike(a) ?
         iters.map(a, fn, scope) : !function () {
           for (var k in a) {
-            op.hasOwnProperty.call(a, k) && (r[i++] = fn.call(scope, k, a[k], a));
+            op.hasOwnProperty.call(a, k) && (r[i++] = fn.call(scope, k, a[k], a))
           }
-        }() && r;
+        }() && r
     },
 
     toArray: function (a) {
-      if (!a) {
-        return [];
-      }
-      if (a.toArray) {
-        return a.toArray();
-      }
-      if (is.arr(a)) {
-        return a;
-      }
-      if (is.args(a)) {
-        return slice.call(a);
-      }
+      if (!a) return []
+
+      if (is.arr(a)) return a
+
+      if (a.toArray) return a.toArray()
+
+      if (is.args(a)) return slice.call(a)
+
       return iters.map(a, function (k) {
-        return k;
-      });
+        return k
+      })
     },
 
     first: function (a) {
-      return a[0];
+      return a[0]
     },
 
     last: function (a) {
-      return a[a.length - 1];
+      return a[a.length - 1]
     },
 
     keys: Object.keys ?
       function (o) {
-        return Object.keys(o);
+        return Object.keys(o)
       } :
       function (obj) {
-        var keys = [];
-        for (var key in obj) {
-          op.hasOwnProperty.call(obj, key) && (keys[keys.length] = key);
+        var keys = [], key
+        for (key in obj) {
+          op.hasOwnProperty.call(obj, key) && (keys[keys.length] = key)
         }
-        return keys;
+        return keys
       },
 
     values: function (ob) {
       return o.map(ob, function (k, v) {
-        return v;
-      });
+        return v
+      })
     },
 
     extend: function (ob) {
       o.each(slice.call(arguments, 1), function (source) {
         for (var prop in source) {
-          !is.und(source[prop]) && (ob[prop] = source[prop]);
+          !is.und(source[prop]) && (ob[prop] = source[prop])
         }
-      });
-      return ob;
+      })
+      return ob
     },
 
     trim: String.prototype.trim ?
       function (s) {
-        return s.trim();
+        return s.trim()
       } :
       function (s) {
-        return s.replace(trimReplace, '');
+        return s.replace(trimReplace, '')
       },
 
     bind: function (scope, fn) {
       return function () {
-        fn.apply(scope, arguments);
-      };
+        fn.apply(scope, arguments)
+      }
     }
 
-  };
+  }
 
-  aug(v, iters);
-  aug(v, o);
-  v.is = is;
+  aug(v, iters)
+  aug(v, o)
+  v.is = is
 
   // love thyself
-  v.v = v;
+  v.v = v
 
   // peoples like the object style
-  var Valentine = function (a, scope) {
-    this.val = a;
-    this._scope = scope || null;
-    this._chained = 0;
-  };
+  function Valentine(a, scope) {
+    this.val = a
+    this._scope = scope || null
+    this._chained = 0
+  }
 
   v.each(v.extend({}, iters, o), function (name, fn) {
     Valentine.prototype[name] = function () {
-      var a = v.toArray(arguments);
-      a.unshift(this.val);
-      var ret = fn.apply(this._scope, a);
-      this.val = ret;
-      return this._chained ? this : ret;
-    };
-  });
+      var a = v.toArray(arguments)
+      a.unshift(this.val)
+      var ret = fn.apply(this._scope, a)
+      this.val = ret
+      return this._chained ? this : ret
+    }
+  })
 
   // back compact to underscore (peoples like chaining)
   Valentine.prototype.chain = function () {
-    this._chained = 1;
-    return this;
-  };
+    this._chained = 1
+    return this
+  }
 
   Valentine.prototype.value = function () {
-    return this.val;
-  };
+    return this.val
+  }
 
-  var old = context.v;
+  var old = context.v
   v.noConflict = function () {
-    context.v = old;
-    return this;
-  };
+    context.v = old
+    return this
+  }
 
-  (typeof module !== 'undefined') && module.exports ?
-    (module.exports = v) :
-    (context['v'] = v);
+  if (typeof module !== 'undefined' && module.exports) module.exports = v
+  context['v'] = v
 
-}(this);
+}(this)
