@@ -64,7 +64,7 @@
         for (var i = 0, j = 0, l = a.length; i < l; i++) {
           if (i in a) {
             if (!fn.call(scope, a[i], i, a)) {
-              continue
+              continue;
             }
             r[j++] = a[i]
           }
@@ -112,7 +112,7 @@
           do {
             if (i in obj) {
               memo = obj[i++]
-              break
+              break;
             }
             if (++i >= l) {
               throw new TypeError('Empty array')
@@ -138,7 +138,7 @@
           do {
             if (i in obj) {
               memo = obj[i--]
-              break
+              break;
             }
             if (--i < 0) {
               throw new TypeError('Empty array')
@@ -169,7 +169,7 @@
       for (var i = 0, j = 0, l = a.length; i < l; i++) {
         if (i in a) {
           if (fn.call(scope, a[i], i, a)) {
-            continue
+            continue;
           }
           r[j++] = a[i]
         }
@@ -279,7 +279,7 @@
         is.obj(o) ? (function () {
           for (var k in o) {
             i++
-            break
+            break;
           }
           return (i === 0)
         }()) :

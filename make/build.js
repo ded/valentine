@@ -16,9 +16,9 @@ require('smoosh').config({
     "regexp": false,
     "undef": false,
     "sub": true,
-    "white": true,
+    "white": false,
     "indent": 2,
     "whitespace": true,
-    "asi": false
+    "asi": true
   }
 }).run().build().analyze();
