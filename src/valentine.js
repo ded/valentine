@@ -394,17 +394,15 @@
       }
     },
 
-    ,
-
     parallel: function () {
-      var args = Array.apply(null, arguments)
-        , callback = args.pop()
-        , returns = []
-        , len = 0
+      var args = Array.apply(null, arguments),
+          callback = args.pop(),
+          returns = [],
+          len = 0
       iters.forEach(args, function (el, i) {
         el(function () {
-          var a = Array.apply(null, arguments)
-            , e = a.shift()
+          var a = Array.apply(null, arguments),
+              e = a.shift()
           if (e) return callback(e)
           returns[i] = a
           if (args.length == ++len) returns.unshift(null) && callback.apply(null, returns)
