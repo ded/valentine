@@ -212,6 +212,36 @@ sink('Utility', function (test, ok) {
     bound();
   });
 
+  test('parallel', 2, function () {
+    function getTimeline(fn) {
+      setTimeout(function() {
+        fn(null, 'one')
+      }, 50);
+    }
+    function getUser(fn) {
+      setTimeout(function() {
+        fn(null, 'two')
+      }, 25);
+    }
+    v.parallel(
+      function (fn) {
+        getTimeline(function (e, timeline) {
+          fn(e, timeline)
+        })
+      }
+    , function (fn) {
+        getUser(function (e, user) {
+          fn(e, user)
+        })
+      }
+    , function (e, timeline, user) {
+        if (e) return console.log(e)
+        ok(timeline == 'one', 'first result is "one"')
+        ok(user == 'two', 'second result is "two"')
+      }
+    )
+  })
+
 });
 
 sink('Type Checking', function (test, ok) {

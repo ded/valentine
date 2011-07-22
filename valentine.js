@@ -406,7 +406,7 @@
           callback = args.pop(),
           returns = [],
           len = 0
-      iters.forEach(args, function (el, i) {
+      iters.each(args, function (el, i) {
         el(function () {
           var a = Array.apply(null, arguments),
               e = a.shift()
