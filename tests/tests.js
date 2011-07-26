@@ -101,6 +101,34 @@ sink('Utility', function (test, ok) {
     ok(out.baz == 'thunk', 'contains baz property');
   });
 
+  test('extend deep', 2, function () {
+
+
+    var o = {
+      foo: {
+        baz: 'thunk'
+      }
+    , dog: {
+        bag: 'of stuff'
+      , junk: 'murr'
+      }
+    }
+    var o2 = {
+      foo: {
+        bar: 'baz'
+      }
+    , cat: {
+        bag: 'of more stuff'
+      }
+    , dog: {
+        junk: 'not murr'
+      }
+    }
+    var out = v.extend(o, o2);
+    ok(v.is.def(out.foo.baz), 'contains baz property');
+    ok(v.is.def(out.foo.bar), 'contains bar property');
+  })
+
   test('pluck', 1, function () {
     var o = [
       {a: 'foo'},
@@ -114,8 +142,9 @@ sink('Utility', function (test, ok) {
   });
 
   test('toArray', 1, function () {
-    var el = document.getElementsByTagName('div');
-    ok(v.toArray(el) instanceof Array, 'element collection is now an array');
+    !function () {
+      ok(v.toArray(arguments) instanceof Array, 'element collection is now an array');
+    }('a', 'b', 'c')
   });
 
   test('size', 1, function () {
@@ -345,9 +374,14 @@ sink('OO Style and chaining', function (test, ok) {
 
 sink('Funny business', function (test, ok) {
   test('can call each on nodeList', 1, function () {
-    v.each(document.getElementsByTagName('body'), function (el) {
-      ok(el.tagName.match(/body/i), 'element was found by each() iteration');
-    })
+    if (typeof document !== 'undefined') {
+      // this is a browser test
+      v.each(document.getElementsByTagName('body'), function (el) {
+        ok(el.tagName.match(/body/i), 'element was found by each() iteration');
+      })
+    } else {
+      ok(true, 'noop test')
+    }
   })
 })
 
