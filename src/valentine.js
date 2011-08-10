@@ -416,13 +416,13 @@
     },
 
     parallel: function () {
-      var args = Array.apply(null, arguments),
+      var args = o.toArray(arguments),
           callback = args.pop(),
           returns = [],
           len = 0
       iters.each(args, function (el, i) {
         el(function () {
-          var a = Array.apply(null, arguments),
+          var a = o.toArray(arguments),
               e = a.shift()
           if (e) return callback(e)
           returns[i] = a

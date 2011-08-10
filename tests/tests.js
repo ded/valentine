@@ -265,8 +265,8 @@ sink('Utility', function (test, ok) {
       }
     , function (e, timeline, user) {
         if (e) return console.log(e)
-        ok(timeline == 'one', 'first result is "one"')
-        ok(user == 'two', 'second result is "two"')
+        ok(timeline[0] === 'one', 'first result is "one"')
+        ok(user[0] === 'two', 'second result is "two"')
       }
     )
   })
