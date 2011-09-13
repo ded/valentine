@@ -1,8 +1,8 @@
 if (typeof module !== 'undefined' && module.exports) {
-  var s = require('../build/sink'),
-      start = s.start,
-      sink = s.sink;
-  var v = require('../src/valentine');
+  var s = require('sink-test')
+    , start = s.start
+    , sink = s.sink
+    , v = require('../src/valentine')
 }
 
 sink('Arrays', function(test, ok, before, after) {
@@ -385,4 +385,4 @@ sink('Funny business', function (test, ok) {
   })
 })
 
-start();
+start()

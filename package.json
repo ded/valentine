@@ -1,14 +1,18 @@
 {
-  "name": "valentine",
-  "description": "JavaScripts Functional Sister. Utilitiy, Iterators, type checking",
-  "version": "1.2.0",
-  "homepage": "https://github.com/ded/valentine",
-  "authors": "Dustin Diaz <@ded>",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ded/valentine.git"
-  },
-  "keywords": ["ender", "functional", "iteration", "type checking", "base"],
-  "main": "./valentine.js",
-  "ender": "./src/ender.js"
+    "name": "valentine"
+  , "description": "JavaScripts Functional Sister. Utilitiy, Iterators, type checking"
+  , "version": "1.3.0"
+  , "homepage": "https://github.com/ded/valentine"
+  , "author": "Dustin Diaz <dustin@dustindiaz.com> (http://dustindiaz.com)"
+  , "keywords": ["ender", "functional", "iteration", "type checking", "base"]
+  , "main": "./valentine.js"
+  , "ender": "./src/ender.js"
+  , "repository": {
+      "type": "git"
+    , "url": "https://github.com/ded/valentine.git"
+  }
+  , "devDependencies": {
+      "sink-test": ">= 0.0.9"
+    , "smoosh": ">= 0.3.0"
+  }
 }

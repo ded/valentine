@@ -1,3 +1,4 @@
+.PHONY: boosh test
 boosh:
 	node make/build.js
 test:
