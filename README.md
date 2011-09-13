@@ -106,8 +106,8 @@ Object Style
 
 ``` js
 v(['a', 'b', 'c']).map(function (letter) {
-  return letter.toUpperCase();
-}); // => ['A', 'B', 'C'];
+  return letter.toUpperCase()
+}); // => ['A', 'B', 'C']
 ```
 
 Chains
@@ -116,8 +116,8 @@ Chains
 ``` js
 v(['a', 'b', [['c']], 0, false,,,null,['a', 'b', 'c']])
   .chain().flatten().compact().uniq().map(function (letter) {
-    return letter.toUpperCase();
-  }).value(); // => ['A', 'B', 'C'];
+    return letter.toUpperCase()
+  }).value(); // => ['A', 'B', 'C']
 ```
 
 Ender Support
@@ -137,9 +137,11 @@ Have an existing Ender package? Include it:
 Write code like a boss
 
 ``` js
+
+// as a top level method
 $.v(['a', ['virus'], 'b', 'c']).reject(function (el, i) {
-  return $.is.arr(el[i]);
-});
+  return $.is.arr(el[i])
+})
 
 // top level methods in bridge
 $.each
@@ -151,6 +153,25 @@ $.each
   values
   trim
   bind
+  parallel
 ```
+
+Or just require the valentine module
+
+``` js
+!function (v) {
+  v(['a', ['virus'], 'b', 'c']).reject(function (el, i) {
+    return v.is.arr(el[i])
+  })
+}(require('valentine'))
+```
+
+## Developers
+Care to contribute? Make your edits to `src/valentine.js` and get your environment up and running
+
+    $ npm install --dev
+    $ make
+    $ make test
+    $ open tests/index.html
 
 *Happy iterating*!

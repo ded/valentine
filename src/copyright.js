@@ -1,6 +1,6 @@
 /*!
-  * Valentine: JavaScript's Sister
-  * copyright Dustin Diaz 2011 (@ded)
+  * Valentine: JavaScript's functional Sister
+  * (c) Dustin Diaz 2011
   * https://github.com/ded/valentine
   * License MIT
   */

@@ -1,16 +1,18 @@
-!function (context) {
+!function (name, definition) {
+  if (typeof define == 'function') define(definition)
+  else if (typeof module != 'undefined') module.exports = definition()
+  else this[name] = this['v'] = definition()
+}('valentine', function () {
 
-  var v = function (a, scope) {
-        return new Valentine(a, scope);
-      },
-      ap = [],
-      op = {},
-      slice = ap.slice,
-      nativ = 'map' in ap,
-      nativ18 = 'reduce' in ap,
-      trimReplace = /(^\s*|\s*$)/g
-
-  var iters = {
+  var context = this
+    , old = context.v
+    , ap = []
+    , op = {}
+    , slice = ap.slice
+    , nativ = 'map' in ap
+    , nativ18 = 'reduce' in ap
+    , trimReplace = /(^\s*|\s*$)/g
+    , iters = {
     each: nativ ?
       function (a, fn, scope) {
         ap.forEach.call(a, fn, scope)
@@ -37,9 +39,7 @@
       } :
       function (a, fn, scope) {
         for (var i = 0, l = a.length; i < l; i++) {
-          if (i in a && fn.call(scope, a[i], i, a)) {
-            return true
-          }
+          if (i in a && fn.call(scope, a[i], i, a)) return true
         }
         return false
       },
@@ -49,9 +49,7 @@
       } :
       function (a, fn, scope) {
         for (var i = 0, l = a.length; i < l; i++) {
-          if (i in a && !fn.call(scope, a[i], i, a)) {
-            return false
-          }
+          if (i in a && !fn.call(scope, a[i], i, a)) return false
         }
         return true
       },
@@ -60,12 +58,9 @@
         return a.filter(fn, scope)
       } :
       function (a, fn, scope) {
-        var r = []
-        for (var i = 0, j = 0, l = a.length; i < l; i++) {
+        for (var r = [], i = 0, j = 0, l = a.length; i < l; i++) {
           if (i in a) {
-            if (!fn.call(scope, a[i], i, a)) {
-              continue;
-            }
+            if (!fn.call(scope, a[i], i, a)) continue;
             r[j++] = a[i]
           }
         }
@@ -78,9 +73,7 @@
       function (a, el, start) {
         start = start || 0
         for (var i = 0; i < a.length; i++) {
-          if (i in a && a[i] === el) {
-            return i
-          }
+          if (i in a && a[i] === el) return i
         }
         return -1
       },
@@ -232,12 +225,6 @@
       return one
     }
 
-  };
-
-  function aug(o, o2) {
-    for (var k in o2) {
-      o[k] = o2[k]
-    }
   }
 
   var is = {
@@ -320,7 +307,7 @@
       is.arrLike(a) ?
         iters.each(a, fn, scope) : (function () {
           for (var k in a) {
-            op.hasOwnProperty.call(a, k) && fn.call(scope, k, a[k], a);
+            op.hasOwnProperty.call(a, k) && fn.call(scope, k, a[k], a)
           }
         }())
     },
@@ -363,9 +350,7 @@
       } :
       function (obj) {
         var keys = [], key
-        for (key in obj) {
-          op.hasOwnProperty.call(obj, key) && (keys[keys.length] = key)
-        }
+        for (key in obj) if (op.hasOwnProperty.call(obj, key)) keys[keys.length] = key
         return keys
       },
 
@@ -377,8 +362,8 @@
 
     extend: function () {
       // based on jQuery deep merge
-      var options, name, src, copy, clone,
-          target = arguments[0], i = 1, length = arguments.length
+      var options, name, src, copy, clone
+        , target = arguments[0], i = 1, length = arguments.length
 
       for (; i < length; i++) {
         if ((options = arguments[i]) !== null) {
@@ -416,29 +401,39 @@
     },
 
     parallel: function () {
-      var args = o.toArray(arguments),
-          callback = args.pop(),
-          returns = [],
-          len = 0
-      iters.each(args, function (el, i) {
-        el(function () {
-          var a = o.toArray(arguments),
-              e = a.shift()
-          if (e) return callback(e)
+      var args = o.toArray(arguments)
+        , callback = args.pop()
+        , returns = []
+        , len = 0
+      iters.each(args, function (fn, i) {
+        fn(function () {
+          var a = o.toArray(arguments)
+            , err = a.shift()
+          if (err) return callback(err)
           returns[i] = a
-          if (args.length == ++len) returns.unshift(null) && callback.apply(null, returns)
+          if (args.length == ++len) {
+            returns.unshift(null)
+            callback.apply(null, iters.flatten(returns))
+          }
         })
       })
     }
 
   }
 
+  function v(a, scope) {
+    return new Valentine(a, scope)
+  }
+
+  function aug(o, o2) {
+    for (var k in o2) o[k] = o2[k]
+  }
+
   aug(v, iters)
   aug(v, o)
   v.is = is
 
-  // love thyself
-  v.v = v
+  v.v = v // vainglory
 
   // peoples like the object style
   function Valentine(a, scope) {
@@ -457,23 +452,22 @@
     }
   })
 
-  // back compact to underscore (peoples like chaining)
-  Valentine.prototype.chain = function () {
-    this._chained = 1
-    return this
-  }
+  // people like chaining
+  aug(Valentine.prototype, {
+    chain: function () {
+      this._chained = 1
+      return this
+    }
+  , value: function () {
+      return this.val
+    }
+  })
 
-  Valentine.prototype.value = function () {
-    return this.val
-  }
 
-  var old = context.v
   v.noConflict = function () {
     context.v = old
     return this
   }
 
-  if (typeof module !== 'undefined' && module.exports) module.exports = v
-  context['v'] = v
-
-}(this)
+  return v
+})

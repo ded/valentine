@@ -1,8 +1,8 @@
 if (typeof module !== 'undefined' && module.exports) {
-  var s = require('../build/sink'),
-      start = s.start,
-      sink = s.sink;
-  var v = require('../src/valentine');
+  var s = require('sink-test')
+    , start = s.start
+    , sink = s.sink
+    , v = require('../src/valentine')
 }
 
 sink('Arrays', function(test, ok, before, after) {
@@ -91,7 +91,7 @@ sink('Arrays', function(test, ok, before, after) {
 
 });
 
-sink('Utility', function (test, ok) {
+sink('Utility', function (test, ok, b, a, assert) {
   test('extend', 2, function () {
     var o = {
       foo: 'bar'
@@ -241,32 +241,33 @@ sink('Utility', function (test, ok) {
     bound();
   });
 
-  test('parallel', 2, function () {
+  test('parallel', 3, function () {
     function getTimeline(fn) {
       setTimeout(function() {
-        fn(null, 'one')
-      }, 50);
+        fn(null, 'one', 'two')
+      }, 50)
     }
     function getUser(fn) {
       setTimeout(function() {
-        fn(null, 'two')
-      }, 25);
+        fn(null, 'three')
+      }, 25)
     }
     v.parallel(
       function (fn) {
-        getTimeline(function (e, timeline) {
-          fn(e, timeline)
+        getTimeline(function (e, one, two) {
+          fn(e, one, two)
         })
       }
     , function (fn) {
-        getUser(function (e, user) {
-          fn(e, user)
+        getUser(function (e, three) {
+          fn(e, three)
         })
       }
-    , function (e, timeline, user) {
+    , function (e, one, two, three) {
         if (e) return console.log(e)
-        ok(timeline[0] === 'one', 'first result is "one"')
-        ok(user[0] === 'two', 'second result is "two"')
+        assert(one, 'one', 'first result is "one"')
+        assert(two, 'two', 'second result is "two"')
+        assert(three, 'three', 'third result is "three"')
       }
     )
   })
@@ -385,4 +386,4 @@ sink('Funny business', function (test, ok) {
   })
 })
 
-start();
+start()
