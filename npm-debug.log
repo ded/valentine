@@ -1,0 +1,25 @@
+info it worked if it ends with ok
+verbose cli [ 'node', '/usr/local/bin/npm', 'publish' ]
+info using npm@1.0.27
+info using node@v0.4.11
+verbose config file /Users/dustin/.npmrc
+verbose config file /usr/local/etc/npmrc
+verbose publish [ '.' ]
+verbose cache add [ '.', null ]
+silly cache add: name, spec, args [ undefined, '.', [ '.', null ] ]
+verbose parsed url { pathname: '.', href: '.' }
+ERR! Could not install: .
+ERR! Failed to parse json
+ERR! Unexpected token ILLEGAL
+ERR! File: package.json
+ERR! JSON.parse Failed to parse package.json data.
+ERR! JSON.parse package.json must be actual JSON, not just JavaScript.
+ERR! JSON.parse This is not a bug in npm.
+ERR! JSON.parse Tell the package author to fix their package.json file.
+ERR! 
+ERR! System Darwin 11.1.0
+ERR! command "node" "/usr/local/bin/npm" "publish"
+ERR! cwd /Users/dustin/work/valentine
+ERR! node -v v0.4.11
+ERR! npm -v 1.0.27
+verbose exit [ 1, true ]
