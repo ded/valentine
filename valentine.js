@@ -412,11 +412,11 @@
         , callback = args.pop()
         , returns = []
         , len = 0
-      iters.each(args, function (fn, i) {
-        fn(function () {
-          var a = o.toArray(arguments)
-            , err = a.shift()
-          if (err) return callback(err)
+      iters.each(args, function (el, i) {
+        el(function () {
+          var a = o.toArray(arguments),
+              e = a.shift()
+          if (e) return callback(e)
           returns[i] = a
           if (args.length == ++len) {
             returns.unshift(null)
