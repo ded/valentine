@@ -5,6 +5,8 @@ if (typeof module !== 'undefined' && module.exports) {
     , v = require('../src/valentine')
 }
 
+sink.timeout = 3000
+
 sink('Arrays', function(test, ok, before, after) {
   test('each', 3, function () {
     v.each(['a', 'b'], function (el, i, ar) {
@@ -162,28 +164,28 @@ sink('Utility', function (test, ok, b, a, assert) {
   });
 
   test('flatten', 1, function () {
-    var actual = v.flatten([['a', [[['b']], ['c']], 'd']]);
-    var expected = ['a', 'b', 'c', 'd'];
+    var actual = v.flatten([['a', [[['b']], ['c']], 'd']])
+      , expected = ['a', 'b', 'c', 'd']
     ok(v.every(actual, function (el, i) {
-      return el == expected[i];
-    }), 'flattened a really crappy looking array');
-  });
+      return el == expected[i]
+    }), 'flattened a really crappy looking array')
+  })
 
   test('uniq', 1, function () {
-    var actual = v.uniq(['a', 'a', 'a', 'b', 'b', 'c']);
-    var expected = ['a', 'b', 'c'];
+    var actual = v.uniq(['a', 'a', 'a', 'b', 'b', 'c'])
+      , expected = ['a', 'b', 'c']
     ok(v.every(actual, function (el, i) {
-      return el == expected[i];
-    }), "turned ['a', 'a', 'a', 'b', 'b', 'c'] into ['a', 'b', 'c']");
-  });
+      return el == expected[i]
+    }), "turned ['a', 'a', 'a', 'b', 'b', 'c'] into ['a', 'b', 'c']")
+  })
 
   test('merge', 2, function () {
     // object style
-    var actual = v(['a', 'b', 'c']).merge(['e', 'f', 'g']);
-    var expected = ['a', 'b', 'c', 'e', 'f', 'g'];
+    var actual = v(['a', 'b', 'c']).merge(['e', 'f', 'g'])
+      , expected = ['a', 'b', 'c', 'e', 'f', 'g']
 
     ok(v.every(expected, function (el, i) {
-      return el == actual[i];
+      return el == actual[i]
     }), "merged ['a', 'b', 'c'] and ['d', 'e', 'f']");
 
     // functional style
@@ -194,13 +196,20 @@ sink('Utility', function (test, ok, b, a, assert) {
 
   })
 
+  test('inArray', 4, function () {
+    ok(v(['a', 'b', 'c']).inArray('b'), 'found b in ["a", "b", "c"]')
+    ok(v.inArray(['a', 'b', 'c'], 'b'), 'found b in ["a", "b", "c"]')
+    ok(!v(['a', 'b', 'c']).inArray('d'), 'did not find d in ["a", "b", "c"]')
+    ok(!v.inArray(['a', 'b', 'c'], 'd'), 'did not find d in ["a", "b", "c"]')
+  })
+
   test('first', 1, function () {
     ok(v.first(['a', 'b', 'c']) == 'a', 'a is first');
-  });
+  })
 
   test('last', 1, function () {
     ok(v.last(['a', 'b', 'c']) == 'c', 'c is last');
-  });
+  })
 
   test('keys', 1, function () {
     var actual = v.keys({
@@ -208,27 +217,27 @@ sink('Utility', function (test, ok, b, a, assert) {
       b: 'bar',
       c: 'baz'
     });
-    var expected = ['a', 'b', 'c'];
+    var expected = ['a', 'b', 'c']
     ok(v.every(actual, function (el, i) {
-      return el == expected[i];
-    }), "a, b, c were keys");
-  });
+      return el == expected[i]
+    }), "a, b, c were keys")
+  })
 
   test('values', 1, function () {
     var actual = v.values({
-      a: 'foo',
-      b: 'bar',
-      c: 'baz'
-    });
-    var expected = ['foo', 'bar', 'baz'];
+        a: 'foo'
+      , b: 'bar'
+      , c: 'baz'
+    })
+    var expected = ['foo', 'bar', 'baz']
     ok(v.every(actual, function (el, i) {
-      return el == expected[i];
-    }), "foo, bar, baz values were found");
-  });
+      return el == expected[i]
+    }), "foo, bar, baz values were found")
+  })
 
   test('trim', 1, function () {
     ok(v.trim(' \n\r  omg bbq wtf  \n\n ') === 'omg bbq wtf', 'string was trimmed');
-  });
+  })
 
   test('bind', 1, function () {
     var o = {
@@ -237,9 +246,9 @@ sink('Utility', function (test, ok, b, a, assert) {
     function wha() {
       ok(this.foo == 'bar', 'this.foo == "bar"');
     }
-    var bound = v.bind(o, wha);
+    var bound = v.bind(o, wha)
     bound();
-  });
+  })
 
   test('parallel', 3, function () {
     function getTimeline(fn) {
@@ -270,6 +279,56 @@ sink('Utility', function (test, ok, b, a, assert) {
         assert(three, 'three', 'third result is "three"')
       }
     )
+  })
+
+  test('waterfall', 7, function () {
+    var index = 0
+      , results = ['first', 'second', 'third']
+    v.waterfall([
+      function (callback) {
+        setTimeout(function() {
+          ok(results[index++] == 'first', 'first waterfall method is fired')
+          callback(null, 'obvious', 'corp')
+        }, 150)
+      }
+    , function (a, b, callback) {
+        setTimeout(function() {
+          ok(results[index++] == 'second', 'second waterfall method is fired')
+          ok('obvious' == a, 'a == "obvious"')
+          ok('corp' == b, 'b == "corp"')
+          callback(null, 'final result')
+        }, 50)
+      }]
+    , function (err, rez) {
+        ok(results[index++] == 'third', 'final callback is fired with result "third"')
+        ok(rez == 'final result', 'rez is "final results"')
+        ok(err == null, 'there is no error')
+    })
+  })
+
+  test('waterfall with unlimitted args', 7, function () {
+    var index = 0
+      , results = ['first', 'second', 'third']
+    v.waterfall(
+      function (callback) {
+        setTimeout(function() {
+          ok(results[index++] == 'first', 'first waterfall method is fired')
+          callback(null, 'obvious', 'corp')
+        }, 150)
+      }
+    , function (a, b, callback) {
+        setTimeout(function() {
+          ok(results[index++] == 'second', 'second waterfall method is fired')
+          ok('obvious' == a, 'a == "obvious"')
+          ok('corp' == b, 'b == "corp"')
+          callback(null, 'final result')
+        }, 50)
+      }
+    , function (err, rez) {
+        ok(results[index++] == 'third', 'final callback is fired with result "third"')
+        ok(rez == 'final result', 'rez is "final results"')
+        ok(err == null, 'there is no error')
+    })
   })
 
 });
