@@ -331,7 +331,47 @@ sink('Utility', function (test, ok, b, a, assert) {
     })
   })
 
-});
+  test('function queue', 3, function () {
+    var results = ['first', 'second', 'third']
+      , index = 0
+
+    var q = v.queue(
+      function () {
+        ok(results[index++] == 'first', 'first queue method is fired')
+        q.next()
+      }
+    , function () {
+        ok(results[index++] == 'second', 'second queue method is fired')
+        q.next()
+      }
+    , function () {
+        ok(results[index++] == 'third', 'third queue method is fired')
+        q.next()
+      })
+      q.next()
+  })
+
+  test('function queue as an array', 3, function () {
+    var results = ['first', 'second', 'third']
+      , index = 0
+
+    var q = v.queue([
+      function() {
+        ok(results[index++] == 'first', 'first queue method is fired')
+        q.next()
+      }
+    , function () {
+        ok(results[index++] == 'second', 'second queue method is fired')
+        q.next()
+      }
+    , function () {
+        ok(results[index++] == 'third', 'third queue method is fired')
+        q.next()
+      }])
+    q.next()
+  })
+
+})
 
 sink('Type Checking', function (test, ok) {
 

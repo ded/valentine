@@ -109,6 +109,24 @@ v.waterfall(
 ```
 
   * v.waterfall([fn1, fn2<, fn3>], callback)
+  * v.queue([fn args])
+
+``` js
+var it = v.queue(
+  function () {
+    console.log('one')
+    it.next()
+  }
+, function () {
+    console.log('two')
+    it.next()
+  }
+, function () {
+    console.log('three')
+  }
+)
+it.next()
+```
 
 <h3>type checking</h3>
 
@@ -182,6 +200,7 @@ $.each
   parallel
   waterfall
   inArray
+  queue
 ```
 
 Or just require the valentine module

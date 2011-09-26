@@ -455,7 +455,19 @@
         }
       }(n))
     }
+  , queue: function (ar) {
+      return new Queue(is.arrLike(ar) ? ar : o.toArray(arguments))
+    }
+  }
 
+  function Queue (a) {
+    this.values = a
+    this.index = 0
+  }
+
+  Queue.prototype.next = function () {
+    this.index < this.values.length && this.values[this.index++]()
+    return this
   }
 
   function v(a, scope) {

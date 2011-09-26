@@ -13,4 +13,5 @@ ender.ender({
   , parallel: v.parallel
   , waterfall: v.waterfall
   , inArray: v.inArray
+  , queue: v.queue
 })
