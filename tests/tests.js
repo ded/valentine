@@ -338,7 +338,9 @@ sink('Utility', function (test, ok, b, a, assert) {
     var q = v.queue(
       function () {
         ok(results[index++] == 'first', 'first queue method is fired')
-        q.next()
+        setTimeout(function() {
+          q.next()
+        }, 0)
       }
     , function () {
         ok(results[index++] == 'second', 'second queue method is fired')
@@ -347,8 +349,7 @@ sink('Utility', function (test, ok, b, a, assert) {
     , function () {
         ok(results[index++] == 'third', 'third queue method is fired')
         q.next()
-      })
-      q.next()
+      }).next()
   })
 
   test('function queue as an array', 3, function () {
