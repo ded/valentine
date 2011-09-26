@@ -15,6 +15,7 @@
     , old = context.v
     , ap = []
     , op = {}
+    , n = null
     , slice = ap.slice
     , nativ = 'map' in ap
     , nativ18 = 'reduce' in ap
@@ -28,8 +29,9 @@
         for (var i = 0, l = a.length; i < l; i++) {
           i in a && fn.call(scope, a[i], i, a)
         }
-      },
-    map: nativ ?
+      }
+
+  , map: nativ ?
       function (a, fn, scope) {
         return ap.map.call(a, fn, scope)
       } :
@@ -39,8 +41,9 @@
           i in a && (r[i] = fn.call(scope, a[i], i, a))
         }
         return r
-      },
-    some: nativ ?
+      }
+
+  , some: nativ ?
       function (a, fn, scope) {
         return a.some(fn, scope)
       } :
@@ -49,8 +52,9 @@
           if (i in a && fn.call(scope, a[i], i, a)) return true
         }
         return false
-      },
-    every: nativ ?
+      }
+
+  , every: nativ ?
       function (a, fn, scope) {
         return a.every(fn, scope)
       } :
@@ -59,8 +63,9 @@
           if (i in a && !fn.call(scope, a[i], i, a)) return false
         }
         return true
-      },
-    filter: nativ ?
+      }
+
+  , filter: nativ ?
       function (a, fn, scope) {
         return a.filter(fn, scope)
       } :
@@ -72,8 +77,9 @@
           }
         }
         return r
-      },
-    indexOf: nativ ?
+      }
+
+  , indexOf: nativ ?
       function (a, el, start) {
         return a.indexOf(el, isFinite(start) ? start : 0)
       } :
@@ -83,9 +89,9 @@
           if (i in a && a[i] === el) return i
         }
         return -1
-      },
+      }
 
-    lastIndexOf: nativ ?
+  , lastIndexOf: nativ ?
       function (a, el, start) {
         return a.lastIndexOf(el, isFinite(start) ? start : a.length)
       } :
@@ -99,9 +105,9 @@
           }
         }
         return -1
-      },
+      }
 
-    reduce: nativ18 ?
+  , reduce: nativ18 ?
       function (o, i, m, c) {
         return ap.reduce.call(o, i, m, c);
       } :
@@ -125,9 +131,9 @@
           }
         }
         return memo
-      },
+      }
 
-    reduceRight: nativ18 ?
+  , reduceRight: nativ18 ?
       function (o, i, m, c) {
         return ap.reduceRight.call(o, i, m, c)
       } :
@@ -151,9 +157,9 @@
           }
         }
         return memo
-      },
+      }
 
-    find: function (obj, iterator, context) {
+  , find: function (obj, iterator, context) {
       var result
       iters.some(obj, function (value, index, list) {
         if (iterator.call(context, value, index, list)) {
@@ -162,9 +168,9 @@
         }
       })
       return result
-    },
+    }
 
-    reject: function (a, fn, scope) {
+  , reject: function (a, fn, scope) {
       var r = []
       for (var i = 0, j = 0, l = a.length; i < l; i++) {
         if (i in a) {
@@ -175,25 +181,25 @@
         }
       }
       return r
-    },
+    }
 
-    size: function (a) {
+  , size: function (a) {
       return o.toArray(a).length
-    },
+    }
 
-    pluck: function (a, k) {
+  , pluck: function (a, k) {
       return iters.map(a, function (el) {
         return el[k]
       })
-    },
+    }
 
-    compact: function (a) {
+  , compact: function (a) {
       return iters.filter(a, function (value) {
         return !!value
       })
-    },
+    }
 
-    flatten: function (a) {
+  , flatten: function (a) {
       return iters.reduce(a, function (memo, value) {
         if (is.arr(value)) {
           return memo.concat(iters.flatten(value))
@@ -201,9 +207,9 @@
         memo[memo.length] = value
         return memo
       }, [])
-    },
+    }
 
-    uniq: function (ar) {
+  , uniq: function (ar) {
       var a = [], i, j
       label:
       for (i = 0; i < ar.length; i++) {
@@ -215,9 +221,9 @@
         a[a.length] = ar[i]
       }
       return a
-    },
+    }
 
-    merge: function (one, two) {
+  , merge: function (one, two) {
       var i = one.length, j = 0, l
       if (isFinite(two.length)) {
         for (l = two.length; j < l; j++) {
@@ -232,42 +238,46 @@
       return one
     }
 
+  , inArray: function (ar, needle) {
+      return !!~iters.indexOf(ar, needle)
+    }
+
   }
 
   var is = {
     fun: function (f) {
       return typeof f === 'function'
-    },
+    }
 
-    str: function (s) {
+  , str: function (s) {
       return typeof s === 'string'
-    },
+    }
 
-    ele: function (el) {
+  , ele: function (el) {
       !!(el && el.nodeType && el.nodeType == 1)
-    },
+    }
 
-    arr: function (ar) {
+  , arr: function (ar) {
       return ar instanceof Array
-    },
+    }
 
-    arrLike: function (ar) {
+  , arrLike: function (ar) {
       return (ar && ar.length && isFinite(ar.length))
-    },
+    }
 
-    num: function (n) {
+  , num: function (n) {
       return typeof n === 'number'
-    },
+    }
 
-    bool: function (b) {
+  , bool: function (b) {
       return (b === true) || (b === false)
-    },
+    }
 
-    args: function (a) {
+  , args: function (a) {
       return !!(a && op.hasOwnProperty.call(a, 'callee'))
-    },
+    }
 
-    emp: function (o) {
+  , emp: function (o) {
       var i = 0
       return is.arr(o) ? o.length === 0 :
         is.obj(o) ? (function () {
@@ -278,33 +288,33 @@
           return (i === 0)
         }()) :
         o === ''
-    },
+    }
 
-    dat: function (d) {
+  , dat: function (d) {
       return !!(d && d.getTimezoneOffset && d.setUTCFullYear)
-    },
+    }
 
-    reg: function (r) {
+  , reg: function (r) {
       return !!(r && r.test && r.exec && (r.ignoreCase || r.ignoreCase === false))
-    },
+    }
 
-    nan: function (n) {
+  , nan: function (n) {
       return n !== n
-    },
+    }
 
-    nil: function (o) {
-      return o === null
-    },
+  , nil: function (o) {
+      return o === n
+    }
 
-    und: function (o) {
+  , und: function (o) {
       return typeof o === 'undefined'
-    },
+    }
 
-    def: function (o) {
+  , def: function (o) {
       return typeof o !== 'undefined'
-    },
+    }
 
-    obj: function (o) {
+  , obj: function (o) {
       return o instanceof Object && !is.fun(o) && !is.arr(o)
     }
   }
@@ -317,9 +327,9 @@
             op.hasOwnProperty.call(a, k) && fn.call(scope, k, a[k], a)
           }
         }())
-    },
+    }
 
-    map: function (a, fn, scope) {
+  , map: function (a, fn, scope) {
       var r = [], i = 0
       return is.arrLike(a) ?
         iters.map(a, fn, scope) : !function () {
@@ -327,9 +337,9 @@
             op.hasOwnProperty.call(a, k) && (r[i++] = fn.call(scope, k, a[k], a))
           }
         }() && r
-    },
+    }
 
-    toArray: function (a) {
+  , toArray: function (a) {
       if (!a) return []
 
       if (is.arr(a)) return a
@@ -341,17 +351,17 @@
       return iters.map(a, function (k) {
         return k
       })
-    },
+    }
 
-    first: function (a) {
+  , first: function (a) {
       return a[0]
-    },
+    }
 
-    last: function (a) {
+  , last: function (a) {
       return a[a.length - 1]
-    },
+    }
 
-    keys: Object.keys ?
+  , keys: Object.keys ?
       function (o) {
         return Object.keys(o)
       } :
@@ -359,21 +369,21 @@
         var keys = [], key
         for (key in obj) if (op.hasOwnProperty.call(obj, key)) keys[keys.length] = key
         return keys
-      },
+      }
 
-    values: function (ob) {
+  , values: function (ob) {
       return o.map(ob, function (k, v) {
         return v
       })
-    },
+    }
 
-    extend: function () {
+  , extend: function () {
       // based on jQuery deep merge
       var options, name, src, copy, clone
         , target = arguments[0], i = 1, length = arguments.length
 
       for (; i < length; i++) {
-        if ((options = arguments[i]) !== null) {
+        if ((options = arguments[i]) !== n) {
           // Extend the base object
           for (name in options) {
             src = target[name]
@@ -391,39 +401,59 @@
         }
       }
       return target
-    },
+    }
 
-    trim: String.prototype.trim ?
+  , trim: String.prototype.trim ?
       function (s) {
         return s.trim()
       } :
       function (s) {
         return s.replace(trimReplace, '')
-      },
+      }
 
-    bind: function (scope, fn) {
+  , bind: function (scope, fn) {
       return function () {
         fn.apply(scope, arguments)
       }
-    },
+    }
 
-    parallel: function () {
+  , parallel: function () {
       var args = o.toArray(arguments)
         , callback = args.pop()
         , returns = []
         , len = 0
       iters.each(args, function (el, i) {
         el(function () {
-          var a = o.toArray(arguments),
-              e = a.shift()
+          var a = o.toArray(arguments)
+            , e = a.shift()
           if (e) return callback(e)
           returns[i] = a
           if (args.length == ++len) {
-            returns.unshift(null)
-            callback.apply(null, iters.flatten(returns))
+            returns.unshift(n)
+            callback.apply(n, iters.flatten(returns))
           }
         })
       })
+    }
+
+  , waterfall: function (fns, callback) {
+      var args = o.toArray(arguments)
+        , index = 0
+      if (!is.arr(fns)) {
+        callback = args.pop()
+        fns = args
+      }
+      (function f() {
+        var args = o.toArray(arguments)
+        args.push(f)
+        var err = args.shift()
+        if (!err && fns.length) fns.shift().apply(n, args)
+        else {
+          args.pop()
+          args.unshift(err)
+          callback.apply(n, args)
+        }
+      }(n))
     }
 
   }
@@ -445,7 +475,7 @@
   // peoples like the object style
   function Valentine(a, scope) {
     this.val = a
-    this._scope = scope || null
+    this._scope = scope || n
     this._chained = 0
   }
 

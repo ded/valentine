@@ -62,6 +62,7 @@ API
   * v.values(obj)
   * v.trim(str)
   * v.bind(scope, fn)
+  * v.inArray(ar, needle)
   * v.parallel([fn args])
 
 ``` js
@@ -83,6 +84,31 @@ v.parallel(
   }
 )
 ```
+
+  * v.waterfall([fn args])
+
+``` js
+v.waterfall(
+  function (callback) {
+    callback(null, 'one', 'two')
+  }
+, function (a, b, callback) {
+    console.log(a == 'one')
+    console.log(b == 'two')
+    callback(null, 'three')
+  }
+, function (c, callback) {
+    console.log(c == 'three')
+    callback(null, 'final result')
+  }
+, function (err, result) {
+    console.log(!!err == false)
+    console.log(result == 'final result')
+  }
+)
+```
+
+  * v.waterfall([fn1, fn2<, fn3>], callback)
 
 <h3>type checking</h3>
 
@@ -154,6 +180,8 @@ $.each
   trim
   bind
   parallel
+  waterfall
+  inArray
 ```
 
 Or just require the valentine module

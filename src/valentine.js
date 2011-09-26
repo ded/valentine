@@ -8,6 +8,7 @@
     , old = context.v
     , ap = []
     , op = {}
+    , n = null
     , slice = ap.slice
     , nativ = 'map' in ap
     , nativ18 = 'reduce' in ap
@@ -295,7 +296,7 @@
     }
 
   , nil: function (o) {
-      return o === null
+      return o === n
     }
 
   , und: function (o) {
@@ -375,7 +376,7 @@
         , target = arguments[0], i = 1, length = arguments.length
 
       for (; i < length; i++) {
-        if ((options = arguments[i]) !== null) {
+        if ((options = arguments[i]) !== n) {
           // Extend the base object
           for (name in options) {
             src = target[name]
@@ -421,8 +422,8 @@
           if (e) return callback(e)
           returns[i] = a
           if (args.length == ++len) {
-            returns.unshift(null)
-            callback.apply(null, iters.flatten(returns))
+            returns.unshift(n)
+            callback.apply(n, iters.flatten(returns))
           }
         })
       })
@@ -439,13 +440,13 @@
         var args = o.toArray(arguments)
         args.push(f)
         var err = args.shift()
-        if (!err && fns.length) fns.shift().apply(null, args)
+        if (!err && fns.length) fns.shift().apply(n, args)
         else {
           args.pop()
           args.unshift(err)
-          callback.apply(null, args)
+          callback.apply(n, args)
         }
-      }(null))
+      }(n))
     }
 
   }
@@ -467,7 +468,7 @@
   // peoples like the object style
   function Valentine(a, scope) {
     this.val = a
-    this._scope = scope || null
+    this._scope = scope || n
     this._chained = 0
   }
 

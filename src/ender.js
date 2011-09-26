@@ -11,4 +11,6 @@ ender.ender({
   , trim: v.trim
   , bind: v.bind
   , parallel: v.parallel
+  , waterfall: v.waterfall
+  , inArray: v.inArray
 })
