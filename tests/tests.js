@@ -280,6 +280,37 @@ sink('Utility', function (test, ok, b, a, assert) {
       }
     )
   })
+  test('parallel with defined signature interface', 3, function () {
+    function getTimeline(fn) {
+      setTimeout(function() {
+        fn(null, 'one', 'two')
+      }, 50)
+    }
+    function getUser(fn) {
+      setTimeout(function() {
+        fn(null, 'three')
+      }, 25)
+    }
+    v.parallel([
+      function (fn) {
+        getTimeline(function (e, one, two) {
+          fn(e, one, two)
+        })
+      }
+    , function (fn) {
+        getUser(function (e, three) {
+          fn(e, three)
+        })
+      }]
+
+    , function (e, one, two, three) {
+        if (e) return console.log(e)
+        assert(one, 'one', 'first result is "one"')
+        assert(two, 'two', 'second result is "two"')
+        assert(three, 'three', 'third result is "three"')
+      }
+    )
+  })
 
   test('waterfall', 7, function () {
     var index = 0

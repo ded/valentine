@@ -410,18 +410,23 @@
       }
     }
 
-  , parallel: function () {
+  , parallel: function (fns, callback) {
       var args = o.toArray(arguments)
-        , callback = args.pop()
-        , returns = []
         , len = 0
-      iters.each(args, function (el, i) {
+        , returns = []
+
+      if (!is.arr(fns)) {
+        callback = args.pop()
+        fns = args
+      }
+
+      iters.each(fns, function (el, i) {
         el(function () {
           var a = o.toArray(arguments)
             , e = a.shift()
           if (e) return callback(e)
           returns[i] = a
-          if (args.length == ++len) {
+          if (fns.length == ++len) {
             returns.unshift(n)
             callback.apply(n, iters.flatten(returns))
           }
