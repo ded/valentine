@@ -131,18 +131,28 @@ sink('Utility', function (test, ok, b, a, assert) {
     ok(v.is.def(out.foo.bar), 'contains bar property');
   })
 
-  test('pluck', 1, function () {
-    var o = [
+  test('pluck', 2, function () {
+    var arr = [
       {a: 'foo'},
       {a: 'bar'},
       {a: 'baz'}
-    ];
+    ] 
+    var obj = {
+      b: {a: 'foo'},
+      c: {a: 'bar'},
+      d: {a: 'baz'}
+    }
     var expected = ['foo', 'bar', 'baz'];
-    ok(v.every(v.pluck(o, 'a'), function (el, i) {
+    
+    ok(v.every(v.pluck(arr, 'a'), function (el, i) {
       return el == expected[i];
-    }, 'plucked foo bar baz'));
-  });
-
+    }), 'plucked foo bar baz from arr');
+    
+    ok(v.every(v.pluck(obj, 'a'), function (el, i) {
+      return el == expected[i];
+    }), 'plucked foo bar baz from obj');
+  })
+  
   test('toArray', 1, function () {
     !function () {
       ok(v.toArray(arguments) instanceof Array, 'element collection is now an array');
