@@ -6,8 +6,8 @@
   */
 
 !function (name, definition) {
-  if (typeof define == 'function') define(definition)
-  else if (typeof module != 'undefined') module.exports = definition()
+  if (typeof module != 'undefined') module.exports = definition()
+  else if (typeof define == 'function') define(definition)
   else this[name] = this['v'] = definition()
 }('valentine', function () {
 
@@ -187,12 +187,6 @@
       return o.toArray(a).length
     }
 
-  , pluck: function (a, k) {
-      return iters.map(a, function (el) {
-        return el[k]
-      })
-    }
-
   , compact: function (a) {
       return iters.filter(a, function (value) {
         return !!value
@@ -337,6 +331,16 @@
             op.hasOwnProperty.call(a, k) && (r[i++] = fn.call(scope, k, a[k], a))
           }
         }() && r
+    }
+
+  , pluck: function (a, k) {
+      return is.arrLike(a) ?
+        iters.map(a, function (el) {
+          return el[k]
+        }) :
+        o.map(a, function (_, v) {
+          return v[k]
+        })
     }
 
   , toArray: function (a) {

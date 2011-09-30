@@ -111,8 +111,8 @@ sink('Utility', function (test, ok, b, a, assert) {
         baz: 'thunk'
       }
     , dog: {
-        bag: 'of stuff'
-      , junk: 'murr'
+          bag: 'of stuff'
+        , junk: 'murr'
       }
     }
     var o2 = {
@@ -126,22 +126,32 @@ sink('Utility', function (test, ok, b, a, assert) {
         junk: 'not murr'
       }
     }
-    var out = v.extend(o, o2);
-    ok(v.is.def(out.foo.baz), 'contains baz property');
-    ok(v.is.def(out.foo.bar), 'contains bar property');
+    var out = v.extend(o, o2)
+    ok(v.is.def(out.foo.baz), 'contains baz property')
+    ok(v.is.def(out.foo.bar), 'contains bar property')
   })
 
-  test('pluck', 1, function () {
-    var o = [
-      {a: 'foo'},
-      {a: 'bar'},
-      {a: 'baz'}
-    ];
-    var expected = ['foo', 'bar', 'baz'];
-    ok(v.every(v.pluck(o, 'a'), function (el, i) {
-      return el == expected[i];
-    }, 'plucked foo bar baz'));
-  });
+  test('pluck', 2, function () {
+    var arr = [
+        {a: 'foo'}
+      , {a: 'bar'}
+      , {a: 'baz'}
+    ]
+      , obj = {
+        b: {a: 'foo'}
+      , c: {a: 'bar'}
+      , d: {a: 'baz'}
+    }
+      , expected = ['foo', 'bar', 'baz']
+
+    ok(v.every(v.pluck(arr, 'a'), function (el, i) {
+      return el == expected[i]
+    }), 'plucked foo bar baz from arr')
+
+    ok(v.every(v.pluck(obj, 'a'), function (el, i) {
+      return el == expected[i]
+    }), 'plucked foo bar baz from obj')
+  })
 
   test('toArray', 1, function () {
     !function () {
