@@ -322,6 +322,27 @@ sink('Utility', function (test, ok, b, a, assert) {
     )
   })
 
+  test('parallel flattten', 6, function () {
+    v.parallel([
+      function (fn) {
+        fn(null, ['first one', 'second one'])
+      }
+    , function (fn) {
+        fn(null, ['first two', 'second two', 'third two'], ['first three', 'second three', 'third three', 'fourth three'])
+      }
+    ]
+    , function (er, first, second, third) {
+        assert(first.length, 2, 'first arg has two items')
+        assert(second.length, 3, 'second arg has three items')
+        assert(third.length, 4, 'third arg has four items')
+
+        // sanity checks
+        assert(first[0], 'first one', 'first arg is array')
+        assert(second[2], 'third two', 'second arg is array with three items')
+        assert(third[3], 'fourth three', 'third arg has four items')
+    })
+  })
+
   test('waterfall', 7, function () {
     var index = 0
       , results = ['first', 'second', 'third']

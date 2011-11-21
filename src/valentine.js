@@ -418,6 +418,7 @@
       var args = o.toArray(arguments)
         , len = 0
         , returns = []
+        , flattened = []
 
       if (!is.arr(fns)) {
         callback = args.pop()
@@ -432,7 +433,12 @@
           returns[i] = a
           if (fns.length == ++len) {
             returns.unshift(n)
-            callback.apply(n, iters.flatten(returns))
+
+            iters.each(returns, function (r) {
+              flattened = flattened.concat(r)
+            })
+
+            callback.apply(n, flattened)
           }
         })
       })
