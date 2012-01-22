@@ -61,7 +61,8 @@ API
   * v.keys(obj)
   * v.values(obj)
   * v.trim(str)
-  * v.bind(scope, fn)
+  * v.bind(scope, fn, [curried args])
+  * v.curry(fn, [curried args])
   * v.inArray(ar, needle)
   * v.parallel([fn args])
 
@@ -197,6 +198,7 @@ $.each
   values
   trim
   bind
+  curry
   parallel
   waterfall
   inArray

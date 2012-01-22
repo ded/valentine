@@ -1,8 +1,9 @@
 if (typeof module !== 'undefined' && module.exports) {
   var s = require('sink-test')
-    , start = s.start
-    , sink = s.sink
-    , v = require('../src/valentine')
+  // these become globals to make the tests IE-friendly due to stupid hoisting
+  start = s.start
+  sink = s.sink
+  v = require('../src/valentine')
 }
 
 sink.timeout = 3000
@@ -249,15 +250,53 @@ sink('Utility', function (test, ok, b, a, assert) {
     ok(v.trim(' \n\r  omg bbq wtf  \n\n ') === 'omg bbq wtf', 'string was trimmed');
   })
 
-  test('bind', 1, function () {
-    var o = {
-      foo: 'bar'
-    };
-    function wha() {
-      ok(this.foo == 'bar', 'this.foo == "bar"');
+  // bind() and curry() are the same except bind() takes a scope argument at the begining
+  function testBindAndCurry(type) {
+    var expected, o = { foo: 'bar' }, ret = { bar: 'foo' }
+
+    // our function to curry
+    function itburns() {
+      type === 'bind' && ok(this === o && this.foo === 'bar', 'bound to correct object')
+      ok(arguments.length === expected.length, expected.length + ' arguments supplied from curried function')
+      var isok = true
+      for (var i = 0; i < expected.length; i++) {
+        if (expected[i] !== arguments[i])
+          isok = false
+      }
+      ok(isok, 'arguments identical to expected')
+      return ret
     }
-    var bound = v.bind(o, wha)
-    bound();
+
+    // test executor, first arg is what we pass to curry()/bind() as the curry arguments
+    // second arg is what we call the curried/bound function with, both of these arguments
+    // together should be what we get in 'expected'
+    function runtest(curriedargs, calledargs) {
+      var vargs = (type === 'bind' ? [ o, itburns ] : [ itburns ]).concat(curriedargs) // arguments to pass to v.bind()/v.curry()
+        , fn = v[type].apply(null, vargs)
+
+      var r = fn.apply(null, calledargs)
+      ok(r === ret, 'returned correct object')
+    }
+
+    expected = []
+    runtest([], [])
+
+    expected = [ 'additional' ]
+    runtest([], [ 'additional' ])
+
+    expected = ['one', 'two', [ 'three', 'three' ]]
+    runtest(expected, [])
+
+    expected = [ 'one', 'two', [ 'three', 'three' ], 'additional', [ 'yee', 'haw' ]]
+    runtest([ 'one', 'two', expected[2] ], [ 'additional', expected[4] ])
+  }
+
+  test('bind', 16, function () {
+    testBindAndCurry('bind')
+  })
+
+  test('curry', 12, function () {
+    testBindAndCurry('curry')
   })
 
   test('parallel', 3, function () {
