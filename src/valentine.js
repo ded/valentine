@@ -409,9 +409,9 @@
       }
 
   , bind: function (scope, fn) {
-      var args = slice.call(arguments, 2)
+      var args = arguments.length > 2 ? slice.call(arguments, 2) : null
       return function () {
-        return fn.apply(scope, args.concat(slice.call(arguments)))
+        return fn.apply(scope, args ? args.concat(slice.call(arguments)) : arguments)
       }
     }
 
