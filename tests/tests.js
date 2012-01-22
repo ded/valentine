@@ -252,8 +252,9 @@ sink('Utility', function (test, ok, b, a, assert) {
 
   // bind() and curry() are the same except bind() takes a scope argument at the begining
   function testBindAndCurry(type) {
-    var expected, o = { foo: 'bar' }
+    var expected, o = { foo: 'bar' }, ret = { bar: 'foo' }
 
+    // our function to curry
     function itburns() {
       type === 'bind' && ok(this === o && this.foo === 'bar', 'bound to correct object')
       ok(arguments.length === expected.length, expected.length + ' arguments supplied from curried function')
@@ -263,33 +264,38 @@ sink('Utility', function (test, ok, b, a, assert) {
           isok = false
       }
       ok(isok, 'arguments identical to expected')
+      return ret
     }
 
-    function runtest(args) {
-      var vargs = (type === 'bind' ? [ o, itburns ] : [ itburns ]).concat(expected) // arguments to pass to v.bind()/v.curry()
+    // test executor, first arg is what we pass to curry()/bind() as the curry arguments
+    // second arg is what we call the curried/bound function with, both of these arguments
+    // together should be what we get in 'expected'
+    function runtest(curriedargs, calledargs) {
+      var vargs = (type === 'bind' ? [ o, itburns ] : [ itburns ]).concat(curriedargs) // arguments to pass to v.bind()/v.curry()
         , fn = v[type].apply(null, vargs)
 
-      fn.apply(args)
+      var r = fn.apply(null, calledargs)
+      ok(r === ret, 'returned correct object')
     }
 
     expected = []
-    runtest([])
+    runtest([], [])
 
     expected = [ 'additional' ]
-    runtest([ 'additional' ])
+    runtest([], [ 'additional' ])
 
     expected = ['one', 'two', [ 'three', 'three' ]]
-    runtest([])
+    runtest(expected, [])
 
-    expected = ['one', 'two', [ 'three', 'three' ], 'additional', [ 'yee', 'haw' ]]
-    runtest([ 'additional', expected[4] ])
+    expected = [ 'one', 'two', [ 'three', 'three' ], 'additional', [ 'yee', 'haw' ]]
+    runtest([ 'one', 'two', expected[2] ], [ 'additional', expected[4] ])
   }
 
-  test('bind', 12, function () {
+  test('bind', 16, function () {
     testBindAndCurry('bind')
   })
 
-  test('curry', 8, function () {
+  test('curry', 12, function () {
     testBindAndCurry('curry')
   })
 

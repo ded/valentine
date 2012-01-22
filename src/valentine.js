@@ -411,7 +411,7 @@
   , bind: function (scope, fn) {
       var args = slice.call(arguments, 2)
       return function () {
-        fn.apply(scope, args.concat(slice.call(arguments)))
+        return fn.apply(scope, args.concat(slice.call(arguments)))
       }
     }
 
@@ -419,7 +419,7 @@
       if (arguments.length == 1) return fn
       var args = slice.call(arguments, 1)
       return function () {
-        fn.apply(null, args.concat(slice.call(arguments)))
+        return fn.apply(null, args.concat(slice.call(arguments)))
       }
     }
 
