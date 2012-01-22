@@ -10,6 +10,7 @@ ender.ender({
   , values: v.values
   , trim: v.trim
   , bind: v.bind
+  , curry: v.curry
   , parallel: v.parallel
   , waterfall: v.waterfall
   , inArray: v.inArray

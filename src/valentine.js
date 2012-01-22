@@ -409,8 +409,17 @@
       }
 
   , bind: function (scope, fn) {
+      var args = slice.call(arguments, 2)
       return function () {
-        fn.apply(scope, arguments)
+        fn.apply(scope, args.concat(slice.call(arguments)))
+      }
+    }
+
+  , curry: function (fn) {
+      if (arguments.length == 1) return fn
+      var args = slice.call(arguments, 1)
+      return function () {
+        fn.apply(null, args.concat(slice.call(arguments)))
       }
     }
 
