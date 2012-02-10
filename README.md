@@ -1,6 +1,7 @@
     \  / _. |  _  ._ _|_ o ._   _
      \/ (_| | (/_ | | |_ | | | (/_
 
+[![Build Status](https://secure.travis-ci.org/ded/valentine.png)](http://travis-ci.org/ded/valentine)
 JavaScript's Sister, and protector — providing you with type checking, functional iterators, and common utility helpers; utilizing native JavaScript methods (when available) for optimal speed.
 
 Browser usage:
