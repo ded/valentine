@@ -241,7 +241,7 @@
     }
 
   , ele: function (el) {
-      !!(el && el.nodeType && el.nodeType == 1)
+      return !!(el && el.nodeType && el.nodeType == 1)
     }
 
   , arr: function (ar) {
