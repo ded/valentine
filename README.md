@@ -2,7 +2,7 @@
      \/ (_| | (/_ | | |_ | | | (/_
 
 [![Build Status](https://secure.travis-ci.org/ded/valentine.png)](http://travis-ci.org/ded/valentine)
-JavaScript's Sister, and protector — providing you with type checking, functional iterators, and common utility helpers; utilizing native JavaScript methods (when available) for optimal speed.
+JavaScript's Sister, and protector — inspired by Underscore; Valentine provides you with type checking, functional iterators, and common utility helpers such as waterfalls, queues, and parallels; all utilizing native JavaScript methods (when available) for optimal speed.
 
 Browser usage:
 
@@ -22,11 +22,11 @@ Node users, install it:
 Use it:
 
 ``` js
-var v = require('valentine');
+var v = require('valentine')
 
 // showcase object style
 v(['a', 'b', 'c']).map(function (letter) {
-  return letter.toUpperCase();
+  return letter.toUpperCase()
 }).join(' '); // => 'A B C'
 ```
 
@@ -219,7 +219,7 @@ Or just require the valentine module
 ## Developers
 Care to contribute? Make your edits to `src/valentine.js` and get your environment up and running
 
-    $ npm install --dev
+    $ npm install -d
     $ make
     $ make test
     $ open tests/index.html
