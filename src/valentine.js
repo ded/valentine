@@ -7,7 +7,7 @@
   var context = this
     , old = context.v
     , ap = []
-    , op = {}
+    , hasOwn = Object.prototype.hasOwnProperty
     , n = null
     , slice = ap.slice
     , nativ = 'map' in ap
@@ -261,7 +261,7 @@
     }
 
   , args: function (a) {
-      return !!(a && op.hasOwnProperty.call(a, 'callee'))
+      return !!(a && hasOwn.call(a, 'callee'))
     }
 
   , emp: function (o) {
@@ -311,7 +311,7 @@
       is.arrLike(a) ?
         iters.each(a, fn, scope) : (function () {
           for (var k in a) {
-            op.hasOwnProperty.call(a, k) && fn.call(scope, k, a[k], a)
+            hasOwn.call(a, k) && fn.call(scope, k, a[k], a)
           }
         }())
     }
@@ -321,7 +321,7 @@
       return is.arrLike(a) ?
         iters.map(a, fn, scope) : !function () {
           for (var k in a) {
-            op.hasOwnProperty.call(a, k) && (r[i++] = fn.call(scope, k, a[k], a))
+            hasOwn.call(a, k) && (r[i++] = fn.call(scope, k, a[k], a))
           }
         }() && r
     }
@@ -364,7 +364,7 @@
       } :
       function (obj) {
         var keys = [], key
-        for (key in obj) if (op.hasOwnProperty.call(obj, key)) keys[keys.length] = key
+        for (key in obj) if (hasOwn.call(obj, key)) keys[keys.length] = key
         return keys
       }
 
