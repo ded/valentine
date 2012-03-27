@@ -1,8 +1,8 @@
-!function (name, definition) {
+(function (name, definition) {
   if (typeof module != 'undefined') module.exports = definition()
   else if (typeof define == 'function') define(definition)
   else this[name] = this['v'] = definition()
-}('valentine', function () {
+})('valentine', function () {
 
   var context = this
     , old = context.v
@@ -536,4 +536,4 @@
   }
 
   return v
-})
+});
