@@ -78,7 +78,9 @@
       } :
       function (a, el, start) {
         start = start || 0
-        for (var i = 0; i < a.length; i++) {
+        start = start < 0 ? 0 : start
+        start = start > a.length ? a.length : start
+        for (var i = start; i < a.length; i++) {
           if (i in a && a[i] === el) return i
         }
         return -1
@@ -196,12 +198,13 @@
       }, [])
     }
 
-  , uniq: function (ar) {
+  , uniq: function (ar, opt_iterator) {
       var a = [], i, j
+      ar = opt_iterator ? iters.map(ar, opt_iterator) : ar
       label:
       for (i = 0; i < ar.length; i++) {
         for (j = 0; j < a.length; j++) {
-          if (a[j] == ar[i]) {
+          if (a[j] === ar[i]) {
             continue label
           }
         }
