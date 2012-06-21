@@ -382,6 +382,20 @@ sink('Utility', function (test, ok, b, a, assert) {
     })
   })
 
+  test('parallel should throw an exception with an empty array', 1, function () {
+    var timer = setTimeout(function () {
+      ok(false, 'Failed by not throwing an exception from an empty array')
+    }, 50)
+    try {
+      v.parallel([], function (err) {
+
+      })
+    } catch (ex) {
+      clearTimeout(timer)
+      ok(true, 'exception thrown with Empty array')
+    }
+  })
+
   test('waterfall', 7, function () {
     var index = 0
       , results = ['first', 'second', 'third']
@@ -430,6 +444,20 @@ sink('Utility', function (test, ok, b, a, assert) {
         ok(rez == 'final result', 'rez is "final results"')
         ok(err == null, 'there is no error')
     })
+  })
+
+  test('waterfall with an empty array should throw exception', 1, function () {
+    var timer = setTimeout(function () {
+      ok(false, 'Failed by not throwing an exception from an empty array')
+    }, 50)
+    try {
+      v.waterfall([], function (err) {
+
+      })
+    } catch (ex) {
+      clearTimeout(timer)
+      ok(true, 'exception thrown with Empty array')
+    }
   })
 
   test('function queue', 3, function () {

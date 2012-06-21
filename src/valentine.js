@@ -432,6 +432,7 @@
         , returns = []
         , flattened = []
 
+      if (is.arr(fns) && fns.length === 0 || (is.fun(fns) && args.length === 1)) throw new TypeError('Empty parallel array')
       if (!is.arr(fns)) {
         callback = args.pop()
         fns = args
@@ -459,10 +460,13 @@
   , waterfall: function (fns, callback) {
       var args = o.toArray(arguments)
         , index = 0
+
+      if (is.arr(fns) && fns.length === 0 || (is.fun(fns) && args.length === 1)) throw new TypeError('Empty waterfall array')
       if (!is.arr(fns)) {
         callback = args.pop()
         fns = args
       }
+
       (function f() {
         var args = o.toArray(arguments)
         args.push(f)
