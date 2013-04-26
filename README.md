@@ -35,37 +35,58 @@ API
 
 <h3>iterators</h3>
 
-  * v.each(ar || obj, callback[, scope])
-  * v.map(ar || obj, callback[, scope])
-  * v.every(ar, callback[, scope])
-  * v.some(ar, callback[, scope])
-  * v.filter(ar, callback[, scope])
-  * v.reject(ar, callback[, scope])
+  * v.each(array || object, callback[, scope])
+  * v.map(array || object, callback[, scope])
+  * v.every(ar, *callback[, scope])
+  * v.some(ar, *callback[, scope])
+  * v.filter(ar, *callback[, scope])
+  * v.reject(ar, *callback[, scope])
   * v.indexOf(ar, item[, start])
   * v.lastIndexOf(ar, item[, start])
-  * v.reduce(ar, callback, memo[, scope])
-  * v.reduceRight(ar, callback, memo[, scope])
+  * v.reduce(ar, **callback, memo[, scope])
+  * v.reduceRight(ar, **callback, memo[, scope])
+
+*`callback` is defined as:
+
+``` js
+// when array
+function callback(item, index, array) {
+
+}
+// when object
+function callback(key, value, object) {
+
+}
+```
+
+**`calback` is defined as:
+
+``` js
+function callback(memo, item, index, array) {
+
+}
+```
 
 <h3>utility</h3>
 
-  * v.extend(obj[, obj2[, obj3[...]]])
-  * v.merge(ar1, ar2)
-  * v.pluck(ar, key)
-  * v.toArray(sparse)
-  * v.size(ar)
-  * v.find(ar, key)
-  * v.compact(ar)
-  * v.flatten(ar)
-  * v.uniq(ar)
-  * v.first(ar)
-  * v.last(ar)
-  * v.keys(obj)
-  * v.values(obj)
-  * v.trim(str)
-  * v.bind(scope, fn, [curried args])
-  * v.curry(fn, [curried args])
-  * v.inArray(ar, needle)
-  * v.parallel([fn args])
+  * v.extend(obj[, obj2[, obj3[...]]]) => object
+  * v.merge(ar1, ar2) => array (ar1 modified)
+  * v.pluck(array||object, key) => array
+  * v.toArray(sparse) => array (duh)
+  * v.size(array) => number
+  * v.find(array, key) => *value
+  * v.compact(array) => array
+  * v.flatten(array) => array
+  * v.uniq(array) => array
+  * v.first(array) => *value
+  * v.last(array) => *value
+  * v.keys(object) => array
+  * v.values(object) => array
+  * v.trim(string) => string
+  * v.bind(scope, fn, [curried args]) => function
+  * v.curry(fn, [curried args]) => function
+  * v.inArray(array, needle) => boolean
+  * v.parallel([fn args]) => void
 
 ``` js
 v.parallel(
@@ -131,6 +152,7 @@ it.next()
 ```
 
 <h3>type checking</h3>
+Each method returns a boolean
 
   * v.is.fun(o)
   * v.is.str(o)

@@ -79,7 +79,7 @@ sink('Arrays', function(test, ok, before, after) {
     var expected = ['a', 'b', 'c'];
     ok(v.every(expected, function (el, i) {
       return el == a[i];
-    }), 'filters out viruses');
+    }), 'rejects out viruses');
   });
 
   test('indexOf', 2, function () {

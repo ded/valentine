@@ -1,15 +1,15 @@
 /*!
   * Valentine: JavaScript's functional Sister
-  * (c) Dustin Diaz 2012
+  * (c) Dustin Diaz 2013
   * https://github.com/ded/valentine
   * License MIT
   */
 
-(function (name, definition) {
+(function (name, context, definition) {
   if (typeof module != 'undefined') module.exports = definition()
   else if (typeof define == 'function') define(definition)
-  else this[name] = this['v'] = definition()
-})('valentine', function () {
+  else context[name] = context['v'] = definition()
+})('valentine', this, function () {
 
   var context = this
     , old = context.v
