@@ -87,6 +87,15 @@ function callback(memo, item, index, array) {
   * v.curry(fn, [curried args]) => function
   * v.inArray(array, needle) => boolean
   * v.parallel([fn args]) => void
+  * v.memo(fn, hasher) => function
+
+``` js
+// use memo to cache expensive methods
+var getAllTheDom = v.memo(function () {
+  return v(document.getElementsByTagName('*')).toArray()
+})
+getAllTheDom().each(modifier)
+```
 
 ``` js
 v.parallel(
