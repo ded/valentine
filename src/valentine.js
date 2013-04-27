@@ -232,6 +232,16 @@
       return !!~iters.indexOf(ar, needle)
     }
 
+  , memo: function (fn, hasher) {
+      var store = {}
+      hasher || (hasher = function (v) {
+        return v
+      })
+      return function () {
+        var key = hasher.apply(this, arguments)
+        return hasOwn.call(store, key) ? store[key] : (store[key] = fn.apply(this, arguments))
+      }
+    }
   }
 
   var is = {

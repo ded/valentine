@@ -214,6 +214,24 @@ sink('Utility', function (test, ok, b, a, assert) {
     ok(!v.inArray(['a', 'b', 'c'], 'd'), 'did not find d in ["a", "b", "c"]')
   })
 
+  test('memoize', function (done) {
+    var called = 0
+    var add = v.memo(function (a, b) {
+      ok(++called == 1, 'only calls memoized method once')
+      return a + b
+    })
+    assert.isFunction(add)
+    var computed = add(1, 2)
+    var expected = 3
+    assert.equal(computed, expected, 'should be called once')
+    var secondCall = add(1, 2)
+
+    assert.notEqual(secondCall, 15, 'second call is not equal to 15')
+    assert.equal(secondCall, expected, 'second call should still be cached value')
+
+    done()
+  })
+
   test('first', 1, function () {
     ok(v.first(['a', 'b', 'c']) == 'a', 'a is first');
   })
