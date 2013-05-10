@@ -86,7 +86,6 @@ function callback(memo, item, index, array) {
   * v.bind(scope, fn, [curried args]) => function
   * v.curry(fn, [curried args]) => function
   * v.inArray(array, needle) => boolean
-  * v.parallel([fn args]) => void
   * v.memo(fn, hasher) => function
 
 ``` js
@@ -96,6 +95,10 @@ var getAllTheDom = v.memo(function () {
 })
 getAllTheDom().each(modifier)
 ```
+
+### parallel api
+
+  * v.parallel([fn args]) => void
 
 ``` js
 v.parallel(
@@ -117,7 +120,10 @@ v.parallel(
 )
 ```
 
+### waterfall api
+
   * v.waterfall([fn args])
+  * v.waterfall([fn1, fn2<, fn3>], callback)
 
 ``` js
 v.waterfall(
@@ -140,7 +146,6 @@ v.waterfall(
 )
 ```
 
-  * v.waterfall([fn1, fn2<, fn3>], callback)
   * v.queue([fn args])
 
 ``` js
