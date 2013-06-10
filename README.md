@@ -168,19 +168,20 @@ it.next()
 <h3>type checking</h3>
 Each method returns a boolean
 
-  * v.is.fun(o)
-  * v.is.str(o)
-  * v.is.ele(o)
-  * v.is.arr(o)
+  * v.is.func(o)
+  * v.is.string(o)
+  * v.is.element(o)
+  * v.is.array(o)
   * v.is.arrLike(o)
   * v.is.num(o)
   * v.is.bool(o)
   * v.is.args(o)
-  * v.is.emp(o)
-  * v.is.dat(o)
+  * v.is.empty(o)
+  * v.is.date(o)
   * v.is.nan(o)
   * v.is.nil(o)
-  * v.is.und(o)
+  * v.is.undef(o)
+  * is.regexp(o)
   * v.is.obj(o)
 
 Object Style

@@ -524,25 +524,25 @@ sink('Utility', function (test, ok, b, a, assert) {
 sink('Type Checking', function (test, ok) {
 
   test('String', 3, function () {
-    ok(v.is.str('hello'), 'v.is.str("hello")')
-    ok(v.is.str(''), 'v.is.str("")')
-    ok(!v.is.str(null), '!v.is.str(null)')
+    ok(v.is.string('hello'), 'v.is.str("hello")')
+    ok(v.is.string(''), 'v.is.str("")')
+    ok(!v.is.string(null), '!v.is.str(null)')
   })
 
   test('Function', 6, function () {
-    ok(v.is.fun(function () {}), 'function () {}')
-    ok(v.is.fun(Function), 'Function')
-    ok(v.is.fun(new Function), 'new Function')
-    ok(!v.is.fun({}), 'not {}')
-    ok(!v.is.fun([]), 'not []')
-    ok(!v.is.fun(''), 'not ""')
+    ok(v.is.func(function () {}), 'function () {}')
+    ok(v.is.func(Function), 'Function')
+    ok(v.is.func(new Function), 'new Function')
+    ok(!v.is.func({}), 'not {}')
+    ok(!v.is.func([]), 'not []')
+    ok(!v.is.func(''), 'not ""')
   })
 
   test('Array', 4, function () {
-    ok(v.is.arr([]), '[]')
-    ok(v.is.arr(Array(1)), 'Array(1)')
-    ok(v.is.arr(new Array), 'new Array')
-    ok(!v.is.arr(Object), 'not Object')
+    ok(v.is.array([]), '[]')
+    ok(v.is.array(Array(1)), 'Array(1)')
+    ok(v.is.array(new Array), 'new Array')
+    ok(!v.is.array(Object), 'not Object')
   })
 
   test('Number', 3, function () {
@@ -567,21 +567,21 @@ sink('Type Checking', function (test, ok) {
   })
 
   test('Empty', 6, function () {
-    ok(v.is.emp({}), '{}')
-    ok(v.is.emp([]), '[]')
-    ok(v.is.emp(''), '""')
-    ok(!v.is.emp({foo:'bar'}), '{foo:bar}')
-    ok(!v.is.emp([1]), '[1]')
-    ok(!v.is.emp('i'), '"i"')
+    ok(v.is.empty({}), '{}')
+    ok(v.is.empty([]), '[]')
+    ok(v.is.empty(''), '""')
+    ok(!v.is.empty({foo:'bar'}), '{foo:bar}')
+    ok(!v.is.empty([1]), '[1]')
+    ok(!v.is.empty('i'), '"i"')
   })
 
   test('Date', 1, function () {
-    ok(v.is.dat(new Date), 'new Date')
+    ok(v.is.date(new Date), 'new Date')
   })
 
   test('RegExp', 2, function () {
-    ok(v.is.reg(/i/), '/i/')
-    ok(v.is.reg(new RegExp("i")), 'new RegExp("i")')
+    ok(v.is.regexp(/i/), '/i/')
+    ok(v.is.regexp(new RegExp("i")), 'new RegExp("i")')
   })
 
   test('Null', 3, function () {
@@ -591,9 +591,9 @@ sink('Type Checking', function (test, ok) {
   })
 
   test('Undefined', 3, function () {
-    ok(v.is.und(), 'no args')
-    ok(v.is.und(undefined), 'undefined')
-    ok(!v.is.und(null), 'undefined')
+    ok(v.is.undef(), 'no args')
+    ok(v.is.undef(undefined), 'undefined')
+    ok(!v.is.undef(null), 'undefined')
   })
 
   test('Object', 4, function () {
@@ -605,11 +605,11 @@ sink('Type Checking', function (test, ok) {
 
   if (typeof window !== 'undefined' && window.document) {
     test('Element', 5, function () {
-      ok(v.is.ele(document.body), 'document.body')
-      ok(v.is.ele(document.createElement('div')), 'createElement("div")')
-      ok(!v.is.ele({}), 'not {}')
-      ok(!v.is.ele([]), 'not []')
-      ok(!v.is.ele(document.getElementsByTagName('body')), 'not getElementsByTagName()')
+      ok(v.is.element(document.body), 'document.body')
+      ok(v.is.element(document.createElement('div')), 'createElement("div")')
+      ok(!v.is.element({}), 'not {}')
+      ok(!v.is.element([]), 'not []')
+      ok(!v.is.element(document.getElementsByTagName('body')), 'not getElementsByTagName()')
     })
   }
 

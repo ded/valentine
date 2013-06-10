@@ -319,6 +319,16 @@
     }
   }
 
+  // nicer looking aliases
+  is.empty = is.emp
+  is.date = is.dat
+  is.regexp = is.reg
+  is.element = is.ele
+  is.array = is.arr
+  is.string = is.str
+  is.undef = is.und
+  is.func = is.fun
+
   var o = {
     each: function (a, fn, scope) {
       is.arrLike(a) ?
