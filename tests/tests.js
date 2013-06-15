@@ -519,6 +519,65 @@ sink('Utility', function (test, ok, b, a, assert) {
     q.next()
   })
 
+  test('throttle', function (done) {
+    var called = 0
+    var start = new Date()
+    var throttler = v.throttle(50, function () {
+      ++called
+      var now = new Date()
+      var diff = now - start
+      if (called == 1) {
+        ok(diff >= 50, 'first throttle is past 50ms')
+      }
+      if (called == 2) {
+        ok(diff >= 100, '2nd call is throttled at 100ms')
+        done()
+      }
+    })
+    throttler()
+    throttler()
+    setTimeout(throttler, 50)
+  })
+
+  test('debounce', function (done) {
+    var flag = true
+    var debouncer = v.debounce(100, function () {
+      flag = false
+      ok(true, 'debouncer called')
+      var now = new Date()
+      ok(now - start >= 100, 'debounce time has passed')
+      done()
+    })
+    debouncer()
+    ok(flag, 'debouncer not called')
+    debouncer()
+    ok(flag, 'debouncer not called')
+    debouncer()
+    ok(flag, 'debouncer not called')
+    var start = new Date()
+  })
+
+  test('throttleDebounce', function (done) {
+    var called = 0
+    var interval
+    var fn = v.throttleDebounce(100, 50, function () {
+      var now = new Date()
+      ++called
+      if (called == 1) {
+        ok(now - start >= 50 && now - start < 100, 'debounce called before throttle first pass')
+        interval = setInterval(fn, 10)
+      }
+      if (called == 2) {
+        ok(now - start >= 150, 'throttle called after several debounces')
+        clearInterval(interval)
+        done()
+      }
+    })
+    var start = new Date()
+    fn()
+
+  })
+
 })
 
 sink('Type Checking', function (test, ok) {

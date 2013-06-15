@@ -146,6 +146,8 @@ v.waterfall(
 )
 ```
 
+### Queue api
+
   * v.queue([fn args])
 
 ``` js
@@ -163,6 +165,28 @@ var it = v.queue(
   }
 )
 it.next()
+```
+
+### throttle, debounce, throttleDebounce
+
+  * v.throttle(ms, fn, opt_scope) => function
+  * v.debounce(ms, fn, opt_scope) => function
+  * v.throttleDebounce(throttleMs, debounceMs, fn, opt_scope) => function
+
+``` js
+window.onscroll = v.throttle(50, function (e) {
+  // expensive scroll function
+})
+
+window.mousemove = v.debounce(500, function (e) {
+  // user has paused momentarily
+})
+
+textarea.onkeypress = v.throttleDebounce(20000, 1000, function () {
+  // autosave(this.value)
+  // called after 1s if not called again within 1s
+  // but guaranteed to be called within 20s
+})
 ```
 
 <h3>type checking</h3>

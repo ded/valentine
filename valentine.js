@@ -337,7 +337,7 @@
   is.func = is.fun
 
   var o = {
-    each: function (a, fn, scope) {
+    each: function each(a, fn, scope) {
       is.arrLike(a) ?
         iters.each(a, fn, scope) : (function () {
           for (var k in a) {
@@ -346,7 +346,7 @@
         }())
     }
 
-  , map: function (a, fn, scope) {
+  , map: function map(a, fn, scope) {
       var r = [], i = 0
       return is.arrLike(a) ?
         iters.map(a, fn, scope) : !function () {
@@ -356,7 +356,7 @@
         }() && r
     }
 
-  , pluck: function (a, k) {
+  , pluck: function pluck(a, k) {
       return is.arrLike(a) ?
         iters.map(a, function (el) {
           return el[k]
@@ -366,7 +366,7 @@
         })
     }
 
-  , toArray: function (a) {
+  , toArray: function toArray(a) {
       if (!a) return []
 
       if (is.arr(a)) return a
@@ -380,31 +380,31 @@
       })
     }
 
-  , first: function (a) {
+  , first: function first(a) {
       return a[0]
     }
 
-  , last: function (a) {
+  , last: function last(a) {
       return a[a.length - 1]
     }
 
   , keys: Object.keys ?
-      function (o) {
+      function keysNative(o) {
         return Object.keys(o)
       } :
-      function (obj) {
+      function keysCustom(obj) {
         var keys = [], key
         for (key in obj) if (hasOwn.call(obj, key)) keys[keys.length] = key
         return keys
       }
 
-  , values: function (ob) {
+  , values: function values(ob) {
       return o.map(ob, function (k, v) {
         return v
       })
     }
 
-  , extend: function () {
+  , extend: function extend() {
       // based on jQuery deep merge
       var options, name, src, copy, clone
         , target = arguments[0], i = 1, length = arguments.length
@@ -431,21 +431,21 @@
     }
 
   , trim: String.prototype.trim ?
-      function (s) {
+      function trimNative(s) {
         return s.trim()
       } :
-      function (s) {
+      function trimCustom(s) {
         return s.replace(trimReplace, '')
       }
 
-  , bind: function (scope, fn) {
+  , bind: function bind(scope, fn) {
       var args = arguments.length > 2 ? slice.call(arguments, 2) : null
       return function () {
         return fn.apply(scope, args ? args.concat(slice.call(arguments)) : arguments)
       }
     }
 
-  , curry: function (fn) {
+  , curry: function curry(fn) {
       if (arguments.length == 1) return fn
       var args = slice.call(arguments, 1)
       return function () {
@@ -453,7 +453,7 @@
       }
     }
 
-  , parallel: function (fns, callback) {
+  , parallel: function parallel(fns, callback) {
       var args = o.toArray(arguments)
         , len = 0
         , returns = []
@@ -484,7 +484,7 @@
       })
     }
 
-  , waterfall: function (fns, callback) {
+  , waterfall: function waterfall(fns, callback) {
       var args = o.toArray(arguments)
         , index = 0
 
@@ -506,8 +506,83 @@
         }
       }(n))
     }
-  , queue: function (ar) {
+
+  , queue: function queue(ar) {
       return new Queue(is.arrLike(ar) ? ar : o.toArray(arguments))
+    }
+
+  , debounce: function debounce(wait, fn, opt_scope) {
+      var timeout
+      function caller() {
+        var args = arguments
+          , context = opt_scope || this
+        function later() {
+          timeout = null
+          fn.apply(context, args)
+        }
+        clearTimeout(timeout)
+        timeout = setTimeout(later, wait)
+      }
+
+      // cancelation method
+      caller.cancel = function debounceCancel() {
+        clearTimeout(timeout)
+        timeout = null
+      }
+
+      return caller
+    }
+
+  , throttle: function throttle(wait, fn, opt_scope) {
+      var timeout
+      return function throttler() {
+        var context = opt_scope || this
+          , args = arguments
+        if (!timeout) {
+          timeout = setTimeout(function throttleTimeout() {
+              fn.apply(context, args)
+              timeout = null
+            },
+            wait
+          )
+        }
+      }
+    }
+
+  , throttleDebounce: function (throttleMs, debounceMs, fn, opt_scope) {
+      var args
+        , context
+        , debouncer
+        , throttler
+
+      function caller() {
+        args = arguments
+        context = opt_scope || this
+
+        clearTimeout(debouncer)
+        debouncer = setTimeout(function () {
+          clearTimeout(throttler)
+          throttler = null
+          fn.apply(context, args)
+        }, debounceMs)
+
+        if (!throttler) {
+          throttler = setTimeout(function () {
+            clearTimeout(debouncer)
+            throttler = null
+            fn.apply(context, args)
+          }, throttleMs)
+        }
+      }
+
+      // cancelation method
+      caller.cancel = function () {
+        clearTimeout(debouncer)
+        clearTimeout(throttler)
+        throttler = null
+      }
+
+      return caller
     }
   }
 
