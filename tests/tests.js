@@ -36,9 +36,14 @@ sink('Arrays', function(test, ok, before, after) {
 
   });
 
-  test('every', 2, function () {
-    var a1 = ['a', 'a', 'a'];
-    var a2 = ['a', 'a', 'b'];
+  test('every', function (done) {
+    var a1 = ['a', 'a', 'a']
+    var a2 = ['a', 'a', 'b']
+    var o = {
+        a: 'b'
+      , c: 'd'
+      , foo: 'foo'
+    }
 
     ok(v.every(a1, function (el) {
       return el == 'a'
@@ -46,31 +51,87 @@ sink('Arrays', function(test, ok, before, after) {
 
     ok(!v.every(a2, function (el) {
       return el == 'a'
-    }), 'all elements in array are not "a"');
-  });
+    }), 'all elements in array are not "a"')
 
-  test('some', 2, function () {
-    var a1 = ['a', 'a', 'a'];
-    var a2 = ['a', 'a', 'b'];
+    ok(v.every(o, function (key, val) {
+      return true
+    }))
+
+    ok(v.every(o, function (key, val) {
+      return key.match(/\w+/)
+    }))
+
+    ok(!v.every(o, function (key, val) {
+      return false
+    }))
+
+    done()
+  })
+
+  test('some', function (done) {
+    var a1 = ['a', 'a', 'a']
+    var a2 = ['a', 'a', 'b']
+    var o = {
+        a: 'b'
+      , c: 'd'
+      , foo: 'foo'
+    }
 
     ok(!v.some(a1, function (el) {
       return el == 'b'
-    }), 'no elements in array have "b"');
+    }), 'no elements in array have "b"')
 
     ok(v.some(a2, function (el) {
       return el == 'b'
-    }), 'some elements in array have "b"');
-  });
+    }), 'some elements in array have "b"')
 
-  test('filter', 1, function () {
+    ok(v.some(o, function (key, val) {
+      return key == 'a'
+    }))
+
+    ok(v.some(o, function (key, val) {
+      return val == 'd'
+    }))
+
+    ok(v.some(o, function (key, val) {
+      return val != 'e'
+    }))
+
+    ok(v.some(o, function (key, val) {
+      return key == val
+    }))
+    done()
+  })
+
+  test('filter', function (done) {
     var a = v.filter(['a', 'b', 'virus', 'c'], function (el) {
       return el !== 'virus';
     });
-    var expected = ['a', 'b', 'c'];
+    var expected = ['a', 'b', 'c']
     ok(v.every(expected, function (el, i) {
       return el == a[i];
-    }), 'filters out viruses');
-  });
+    }), 'filters out viruses')
+
+    var o = {
+      foo: 'bar',
+      baz: 'thunk'
+    }
+
+    ok(JSON.stringify(v(o).filter(function (key, val) {
+      return true
+    })) == JSON.stringify(o), 'every item is filtered in')
+
+    ok(JSON.stringify(v(o).filter(function (key, val) {
+      return false
+    })) == JSON.stringify({}), 'zero items are filtered in')
+
+    var actual = v.filter(o, function (key, val) {
+      return key == 'foo'
+    })
+    ok(JSON.stringify(actual) == JSON.stringify({foo: 'bar'}), 'actual: ' + JSON.stringify(actual))
+
+    done()
+  })
 
   test('reject', 1, function () {
     var a = v.reject(['a', 'b', 'virus', 'c'], function (el) {

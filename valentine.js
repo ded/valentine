@@ -356,6 +356,38 @@
         }() && r
     }
 
+  , some: function some(a, fn, scope) {
+      if (is.arrLike(a)) return iters.some(a, fn, scope)
+      for (var k in a) {
+        if (hasOwn.call(a, k) && fn.call(scope, k, a[k], a)) {
+          return true
+        }
+      }
+      return false
+
+    }
+
+  , every: function every(a, fn, scope) {
+      if (is.arrLike(a)) return iters.every(a, fn, scope)
+      for (var k in a) {
+        if (!(hasOwn.call(a, k) && fn.call(scope, k, a[k], a))) {
+          return false
+        }
+      }
+      return true
+    }
+
+  , filter: function filter(a, fn, scope) {
+      var r = {}, k
+      if (is.arrLike(a)) return iters.filter(a, fn, scope)
+      for (k in a) {
+        if (hasOwn.call(a, k) && fn.call(scope, k, a[k], a)) {
+          r[k] = a[k]
+        }
+      }
+      return r
+    }
+
   , pluck: function pluck(a, k) {
       return is.arrLike(a) ?
         iters.map(a, function (el) {

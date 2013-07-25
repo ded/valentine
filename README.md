@@ -35,11 +35,12 @@ API
 
 <h3>iterators</h3>
 
-  * v.each(array || object, callback[, scope])
-  * v.map(array || object, callback[, scope])
-  * v.every(ar, *callback[, scope])
-  * v.some(ar, *callback[, scope])
-  * v.filter(ar, *callback[, scope])
+  * v.each(array || object, callback[, scope]) => void
+  * v.map(array || object, callback[, scope]) => array
+  * v.every(array || object, *callback[, scope]) => boolean
+  * v.some(array || object, *callback[, scope]) => boolean
+  * v.filter(array || object, *callback[, scope]) => array || object
+
   * v.reject(ar, *callback[, scope])
   * v.indexOf(ar, item[, start])
   * v.lastIndexOf(ar, item[, start])
