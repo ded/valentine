@@ -6,7 +6,7 @@ JavaScript's Sister, and protector — inspired by Underscore; Valentine provid
 
 ## Deprecation notice
 
-As of version `2.0.0` — Valentine no longer supports `<= IE8` and `<= Safari 4`. It's been real, but time to move on. To access this level of support, use the [1.8 tag](https://github.com/asdf).
+As of version `2.0.0` — Valentine no longer supports `<= IE8` and `<= Safari 4`. It's been real, but time to move on. To access this level of support, use the [1.8 tag](https://github.com/ded/valentine/tree/v1.8.0).
 
 ### Browser usage:
 
