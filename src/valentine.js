@@ -4,155 +4,48 @@
   else context[name] = context['v'] = definition()
 })('valentine', this, function () {
 
-  var context = this
-    , old = context.v
-    , ap = []
+  var ap = []
     , hasOwn = Object.prototype.hasOwnProperty
     , n = null
     , slice = ap.slice
     , nativ = 'map' in ap
     , nativ18 = 'reduce' in ap
-    , trimReplace = /(^\s*|\s*$)/g
-    , iters = {
-    each: nativ ?
-      function (a, fn, scope) {
-        ap.forEach.call(a, fn, scope)
-      } :
-      function (a, fn, scope) {
-        for (var i = 0, l = a.length; i < l; i++) {
-          i in a && fn.call(scope, a[i], i, a)
-        }
-      }
 
-  , map: nativ ?
-      function (a, fn, scope) {
-        return ap.map.call(a, fn, scope)
-      } :
-      function (a, fn, scope) {
-        var r = [], i
-        for (i = 0, l = a.length; i < l; i++) {
-          i in a && (r[i] = fn.call(scope, a[i], i, a))
-        }
-        return r
-      }
+  var iters = {
+    each: function (a, fn, scope) {
+      ap.forEach.call(a, fn, scope)
+    }
 
-  , some: nativ ?
-      function (a, fn, scope) {
-        return a.some(fn, scope)
-      } :
-      function (a, fn, scope) {
-        for (var i = 0, l = a.length; i < l; i++) {
-          if (i in a && fn.call(scope, a[i], i, a)) return true
-        }
-        return false
-      }
+  , map: function (a, fn, scope) {
+      return ap.map.call(a, fn, scope)
+    }
 
-  , every: nativ ?
-      function (a, fn, scope) {
-        return a.every(fn, scope)
-      } :
-      function (a, fn, scope) {
-        for (var i = 0, l = a.length; i < l; i++) {
-          if (i in a && !fn.call(scope, a[i], i, a)) return false
-        }
-        return true
-      }
+  , some: function (a, fn, scope) {
+      return a.some(fn, scope)
+    }
 
-  , filter: nativ ?
-      function (a, fn, scope) {
-        return a.filter(fn, scope)
-      } :
-      function (a, fn, scope) {
-        for (var r = [], i = 0, j = 0, l = a.length; i < l; i++) {
-          if (i in a) {
-            if (!fn.call(scope, a[i], i, a)) continue;
-            r[j++] = a[i]
-          }
-        }
-        return r
-      }
+  , every: function (a, fn, scope) {
+      return a.every(fn, scope)
+    }
 
-  , indexOf: nativ ?
-      function (a, el, start) {
-        return a.indexOf(el, isFinite(start) ? start : 0)
-      } :
-      function (a, el, start) {
-        start = start || 0
-        start = start < 0 ? 0 : start
-        start = start > a.length ? a.length : start
-        for (var i = start; i < a.length; i++) {
-          if (i in a && a[i] === el) return i
-        }
-        return -1
-      }
+  , filter: function (a, fn, scope) {
+      return a.filter(fn, scope)
+    }
+  , indexOf: function (a, el, start) {
+      return a.indexOf(el, isFinite(start) ? start : 0)
+    }
 
-  , lastIndexOf: nativ ?
-      function (a, el, start) {
-        return a.lastIndexOf(el, isFinite(start) ? start : a.length)
-      } :
-      function (a, el, start) {
-        start = start || a.length
-        start = start >= a.length ? a.length :
-          start < 0 ? a.length + start : start
-        for (var i = start; i >= 0; --i) {
-          if (i in a && a[i] === el) {
-            return i
-          }
-        }
-        return -1
-      }
+  , lastIndexOf: function (a, el, start) {
+      return a.lastIndexOf(el, isFinite(start) ? start : a.length)
+    }
 
-  , reduce: nativ18 ?
-      function (o, i, m, c) {
-        return ap.reduce.call(o, i, m, c);
-      } :
-      function (obj, iterator, memo, context) {
-        if (!obj) obj = []
-        var i = 0, l = obj.length
-        if (arguments.length < 3) {
-          do {
-            if (i in obj) {
-              memo = obj[i++]
-              break;
-            }
-            if (++i >= l) {
-              throw new TypeError('Empty array')
-            }
-          } while (1)
-        }
-        for (; i < l; i++) {
-          if (i in obj) {
-            memo = iterator.call(context, memo, obj[i], i, obj)
-          }
-        }
-        return memo
-      }
+  , reduce: function (o, i, m, c) {
+      return ap.reduce.call(o, i, m, c);
+    }
 
-  , reduceRight: nativ18 ?
-      function (o, i, m, c) {
-        return ap.reduceRight.call(o, i, m, c)
-      } :
-      function (obj, iterator, memo, context) {
-        !obj && (obj = [])
-        var l = obj.length, i = l - 1
-        if (arguments.length < 3) {
-          do {
-            if (i in obj) {
-              memo = obj[i--]
-              break;
-            }
-            if (--i < 0) {
-              throw new TypeError('Empty array')
-            }
-          } while (1)
-        }
-        for (; i >= 0; i--) {
-          if (i in obj) {
-            memo = iterator.call(context, memo, obj[i], i, obj)
-          }
-        }
-        return memo
-      }
+  , reduceRight: function (o, i, m, c) {
+      return ap.reduceRight.call(o, i, m, c)
+    }
 
   , find: function (obj, iterator, context) {
       var result
@@ -413,17 +306,8 @@
       return a[a.length - 1]
     }
 
-  , keys: Object.keys ?
-      function keysNative(o) {
-        return Object.keys(o)
-      } :
-      function keysCustom(obj) {
-        var keys = [], key
-        for (key in obj) if (hasOwn.call(obj, key)) keys[keys.length] = key
-        return keys
-      }
-
-  , values: function values(ob) {
+  , keys: Object.keys
+  , values: function (ob) {
       return o.map(ob, function (k, v) {
         return v
       })
@@ -455,15 +339,11 @@
       return target
     }
 
-  , trim: String.prototype.trim ?
-      function trimNative(s) {
-        return s.trim()
-      } :
-      function trimCustom(s) {
-        return s.replace(trimReplace, '')
-      }
+  , trim: function (s) {
+      return s.trim()
+    }
 
-  , bind: function bind(scope, fn) {
+  , bind: function (scope, fn) {
       var args = arguments.length > 2 ? slice.call(arguments, 2) : null
       return function () {
         return fn.apply(scope, args ? args.concat(slice.call(arguments)) : arguments)
@@ -662,12 +542,6 @@
       return this.val
     }
   })
-
-
-  v.noConflict = function () {
-    context.v = old
-    return this
-  }
 
   return v
 });

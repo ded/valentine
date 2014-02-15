@@ -2,9 +2,13 @@
      \/ (_| | (/_ | | |_ | | | (/_
 
 [![Build Status](https://secure.travis-ci.org/ded/valentine.png)](http://travis-ci.org/ded/valentine)
-JavaScript's Sister, and protector — inspired by Underscore; Valentine provides you with type checking, functional iterators, and common utility helpers such as waterfalls, queues, and parallels; all utilizing native JavaScript methods (when available) for optimal speed.
+JavaScript's Sister, and protector — inspired by Underscore; Valentine provides you with type checking, functional iterators, and common utility helpers such as waterfalls, queues, and parallels; all utilizing native JavaScript methods for optimal speed.
 
-Browser usage:
+## Deprecation notice
+
+As of version `2.0.0` — Valentine no longer supports `<= IE8` and `<= Safari 4`. It's been real, but time to move on. To access this level of support, use the [1.8 tag](https://github.com/asdf).
+
+### Browser usage:
 
 ``` html
 <script src="valentine.js"></script>
@@ -15,11 +19,11 @@ Browser usage:
 </script>
 ```
 
-Node users, install it:
+### Node users
 
-    $ npm install valentine
-
-Use it:
+``` sh
+npm install valentine
+```
 
 ``` js
 var v = require('valentine')
@@ -30,8 +34,8 @@ v(['a', 'b', 'c']).map(function (letter) {
 }).join(' '); // => 'A B C'
 ```
 
-API
----
+## API
+
 
 <h3>iterators</h3>
 
@@ -68,7 +72,7 @@ function callback(memo, item, index, array) {
 }
 ```
 
-<h3>utility</h3>
+### utility
 
   * v.extend(obj[, obj2[, obj3[...]]]) => object
   * v.merge(ar1, ar2) => array (ar1 modified)
@@ -97,7 +101,7 @@ var getAllTheDom = v.memo(function () {
 getAllTheDom().each(modifier)
 ```
 
-### parallel api
+#### parallel api
 
   * v.parallel([fn args]) => void
 
@@ -121,7 +125,7 @@ v.parallel(
 )
 ```
 
-### waterfall api
+#### waterfall api
 
   * v.waterfall([fn args])
   * v.waterfall([fn1, fn2<, fn3>], callback)
@@ -147,7 +151,7 @@ v.waterfall(
 )
 ```
 
-### Queue api
+#### Queue api
 
   * v.queue([fn args])
 
@@ -168,7 +172,7 @@ var it = v.queue(
 it.next()
 ```
 
-### throttle, debounce, throttleDebounce
+#### throttle, debounce, throttleDebounce
 
   * v.throttle(ms, fn, opt_scope) => function
   * v.debounce(ms, fn, opt_scope) => function
@@ -190,7 +194,7 @@ textarea.onkeypress = v.throttleDebounce(20000, 1000, function () {
 })
 ```
 
-<h3>type checking</h3>
+#### type checking
 Each method returns a boolean
 
   * v.is.func(o)
@@ -209,8 +213,7 @@ Each method returns a boolean
   * is.regexp(o)
   * v.is.obj(o)
 
-Object Style
-------
+### Object Style
 
 ``` js
 v(['a', 'b', 'c']).map(function (letter) {
@@ -218,8 +221,7 @@ v(['a', 'b', 'c']).map(function (letter) {
 }); // => ['A', 'B', 'C']
 ```
 
-Chains
-------
+### Chains
 
 ``` js
 v(['a', 'b', [['c']], 0, false,,,null,['a', 'b', 'c']])
@@ -228,25 +230,15 @@ v(['a', 'b', [['c']], 0, false,,,null,['a', 'b', 'c']])
   }).value(); // => ['A', 'B', 'C']
 ```
 
-Ender Support
--------------
-Don't have [Ender](http://ender.no.de)? Install it, and don't ever look back.
+## Ender Support
 
-    $ [sudo] npm install ender -g
-
-Then build valentine into your package
-
-    $ ender build valentine
-
-Have an existing Ender package? Include it:
-
-    $ ender add valentine
-
-Write code like a boss
+``` sh
+ender add valentine
+```
 
 ``` js
 
-// as a top level method
+// available as a top level method on `$`
 $.v(['a', ['virus'], 'b', 'c']).reject(function (el, i) {
   return $.is.arr(el[i])
 })
@@ -281,9 +273,11 @@ Or just require the valentine module
 ## Developers
 Care to contribute? Make your edits to `src/valentine.js` and get your environment up and running
 
-    $ npm install -d
-    $ make
-    $ make test
-    $ open tests/index.html
+``` sh
+npm install
+make
+make test
+open tests/index.html
+```
 
 *Happy iterating*!
