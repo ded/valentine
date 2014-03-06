@@ -92,16 +92,15 @@
     }
 
   , uniq: function (ar, opt_iterator) {
-      var a = [], i, j
-      ar = opt_iterator ? iters.map(ar, opt_iterator) : ar
-      label:
-      for (i = 0; i < ar.length; i++) {
-        for (j = 0; j < a.length; j++) {
-          if (a[j] === ar[i]) {
-            continue label
-          }
+      if (ar == null) return []
+      var a = [], seen = []
+      for (var i = 0, length = ar.length; i < length; i++) {
+        var value = ar[i]
+        if (opt_iterator) value = opt_iterator(value, i, ar)
+        if (!iters.inArray(seen, value)) {
+          seen.push(value)
+          a.push(ar[i])
         }
-        a[a.length] = ar[i]
       }
       return a
     }

@@ -243,12 +243,33 @@ sink('Utility', function (test, ok, b, a, assert) {
     }), 'flattened a really crappy looking array')
   })
 
-  test('uniq', 1, function () {
+  test('uniq.array', 1, function () {
     var actual = v.uniq(['a', 'a', 'a', 'b', 'b', 'c'])
       , expected = ['a', 'b', 'c']
     ok(v.every(actual, function (el, i) {
       return el == expected[i]
     }), "turned ['a', 'a', 'a', 'b', 'b', 'c'] into ['a', 'b', 'c']")
+  })
+
+  test('uniq.object', 2, function () {
+    var input = [
+      {user: 1},
+      {user: 2},
+      {user: 3},
+      {user: 1}
+    ]
+    var actual = v.uniq(input, function (item) {
+      return item.user
+    })
+    var expected = [
+      {user: 1},
+      {user: 2},
+      {user: 3}
+    ]
+    ok(actual.length === 3, 'filtered out duplicate object')
+    ok(v.every(actual, function (el, i) {
+      return el.user == expected[i].user
+    }), "converted duplicate object array into unique object array")
   })
 
   test('merge', 2, function () {
