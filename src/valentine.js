@@ -400,6 +400,7 @@
 
       (function f() {
         var args = o.toArray(arguments)
+        if (!args.length) args.push(null) // allow callbacks with no args as passable non-errored functions
         args.push(f)
         var err = args.shift()
         if (!err && fns.length) fns.shift().apply(n, args)
