@@ -153,7 +153,22 @@ sink('Arrays', function(test, ok, before, after) {
     ok(v.lastIndexOf(['x', 'y', 'z'], 'b') == -1, 'indexOf b == -1');
   });
 
-});
+  v.each(['reduce', 'reduceRight'], function (method, right) {
+    test(method, 3, function() {
+      var init = {}, scope = {}
+      v[method]([5], function (memo, n, i, a) {
+        ok(this === scope, method + ' iterator scope')
+        ok(init === memo && a[i] === n, method + ' iterator signature')    
+      }, init, scope)
+
+      var a = ['b', 'c']
+      ok(v[method](a, function (memo, n) {
+        return memo + n
+      }, 'a') === (right ? 'acb' : 'abc'), method + ' result')
+    })
+  })
+
+})
 
 sink('Utility', function (test, ok, b, a, assert) {
   test('extend', 2, function () {
