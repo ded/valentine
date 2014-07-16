@@ -153,10 +153,10 @@ v.waterfall(
 
 #### series api
   * similar to `waterfall` except passing along args to next function is not a concern
-  * v.waterfall([fn1, fn2<, fn3>], callback)
+  * v.series([fn1, fn2<, fn3>], callback)
 
 ``` js
-v.waterfall(
+v.series(
   function (callback) {
     setTimeout(callback, 2000)
   }
