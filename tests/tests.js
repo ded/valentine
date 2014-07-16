@@ -158,7 +158,7 @@ sink('Arrays', function(test, ok, before, after) {
       var init = {}, scope = {}
       v[method]([5], function (memo, n, i, a) {
         ok(this === scope, method + ' iterator scope')
-        ok(init === memo && a[i] === n, method + ' iterator signature')    
+        ok(init === memo && a[i] === n, method + ' iterator signature')
       }, init, scope)
 
       var a = ['b', 'c']
@@ -573,6 +573,51 @@ sink('Utility', function (test, ok, b, a, assert) {
       clearTimeout(timer)
       ok(true, 'exception thrown with Empty array')
     }
+  })
+
+  test('series', function (done) {
+    var index = 0
+      , results = ['first', 'second', 'third']
+    v.series([
+      function (callback) {
+        setTimeout(function() {
+          ok(results[index++] == 'first', 'first waterfall method is fired')
+          callback(null, 'obvious', 'corp')
+        }, 150)
+      }
+    , function (callback) {
+        setTimeout(function() {
+          ok(results[index++] == 'second', 'second waterfall method is fired')
+          callback(null, 'final result')
+        }, 50)
+      }]
+    , function (err) {
+        ok(results[index++] == 'third', 'final callback is fired with result "third"')
+        ok(err == null, 'there is no error')
+        done()
+    })
+  })
+
+  test('series with an error', function (done) {
+    var index = 0
+      , results = ['first', 'second', 'third']
+    v.series([
+      function (callback) {
+        setTimeout(function() {
+          ok(results[index++] == 'first', 'first waterfall method is fired')
+          callback('Error', 'obvious', 'corp')
+        }, 150)
+      }
+    , function (callback) {
+        setTimeout(function() {
+          ok(false, 'should not be called')
+          callback(null, 'final result')
+        }, 50)
+      }]
+    , function (err) {
+        ok(err == 'Error', 'first arg returns error')
+        done()
+    })
   })
 
   test('function queue', 3, function () {

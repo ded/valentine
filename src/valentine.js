@@ -412,6 +412,16 @@
       }(n))
     }
 
+  , series: function (tasks, callback) {
+      o.waterfall(tasks.map(function (task) {
+        return function (f) {
+          task(function (err) {
+            f(err)
+          })
+        }
+      }), callback)
+    }
+
   , queue: function queue(ar) {
       return new Queue(is.arrLike(ar) ? ar : o.toArray(arguments))
     }
