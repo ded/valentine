@@ -46,11 +46,11 @@
     }
 
   , reduce: function (o, i, m, c) {
-      return ap.reduce.call(o, i, m, c);
+      return ap.reduce.call(o, v.bind(c, i), m);
     }
 
   , reduceRight: function (o, i, m, c) {
-      return ap.reduceRight.call(o, i, m, c)
+      return ap.reduceRight.call(o, v.bind(c, i), m)
     }
 
   , find: function (obj, iterator, context) {
@@ -416,6 +416,16 @@
           callback.apply(n, args)
         }
       }(n))
+    }
+
+  , series: function (tasks, callback) {
+      o.waterfall(tasks.map(function (task) {
+        return function (f) {
+          task(function (err) {
+            f(err)
+          })
+        }
+      }), callback)
     }
 
   , queue: function queue(ar) {
