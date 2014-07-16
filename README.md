@@ -156,7 +156,7 @@ v.waterfall(
   * v.series([fn1, fn2<, fn3>], callback)
 
 ``` js
-v.series(
+v.series([
   function (callback) {
     setTimeout(callback, 2000)
   }
@@ -165,7 +165,7 @@ v.series(
   }
 , function (callback) {
     callback(null)
-  }
+  }]
 , function (err) {
     console.log('done')
   }
