@@ -111,7 +111,7 @@
         }
       } else {
         while (two[j] !== undefined) {
-          first[i++] = second[j++]
+          one[i++] = two[j++]
         }
       }
       one.length = i
