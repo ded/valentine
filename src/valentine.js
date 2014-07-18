@@ -388,7 +388,6 @@
 
   , waterfall: function waterfall(fns, callback) {
       var args = o.toArray(arguments)
-        , index = 0
 
       if (is.arr(fns) && fns.length === 0 || (is.fun(fns) && args.length === 1)) throw new TypeError('Empty waterfall array')
       if (!is.arr(fns)) {
