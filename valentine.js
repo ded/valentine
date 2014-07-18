@@ -14,8 +14,6 @@
     , hasOwn = Object.prototype.hasOwnProperty
     , n = null
     , slice = ap.slice
-    , nativ = 'map' in ap
-    , nativ18 = 'reduce' in ap
 
   var iters = {
     each: function (a, fn, scope) {
@@ -98,7 +96,7 @@
     }
 
   , uniq: function (ar, opt_iterator) {
-      if (ar == null) return []
+      if (ar === null) return []
       var a = [], seen = []
       for (var i = 0, length = ar.length; i < length; i++) {
         var value = ar[i]
@@ -119,7 +117,7 @@
         }
       } else {
         while (two[j] !== undefined) {
-          first[i++] = second[j++]
+          one[i++] = two[j++]
         }
       }
       one.length = i
@@ -179,7 +177,7 @@
       var i = 0
       return is.arr(o) ? o.length === 0 :
         is.obj(o) ? (function () {
-          for (var k in o) {
+          for (var _ in o) {
             i++
             break;
           }
@@ -313,7 +311,7 @@
 
   , keys: Object.keys
   , values: function (ob) {
-      return o.map(ob, function (k, v) {
+      return o.map(ob, function (_, v) {
         return v
       })
     }
@@ -396,7 +394,6 @@
 
   , waterfall: function waterfall(fns, callback) {
       var args = o.toArray(arguments)
-        , index = 0
 
       if (is.arr(fns) && fns.length === 0 || (is.fun(fns) && args.length === 1)) throw new TypeError('Empty waterfall array')
       if (!is.arr(fns)) {
