@@ -171,7 +171,7 @@
       var i = 0
       return is.arr(o) ? o.length === 0 :
         is.obj(o) ? (function () {
-          for (var k in o) {
+          for (var _ in o) {
             i++
             break;
           }
@@ -305,7 +305,7 @@
 
   , keys: Object.keys
   , values: function (ob) {
-      return o.map(ob, function (k, v) {
+      return o.map(ob, function (_, v) {
         return v
       })
     }
