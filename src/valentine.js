@@ -90,7 +90,7 @@
     }
 
   , uniq: function (ar, opt_iterator) {
-      if (ar == null) return []
+      if (ar === null) return []
       var a = [], seen = []
       for (var i = 0, length = ar.length; i < length; i++) {
         var value = ar[i]
