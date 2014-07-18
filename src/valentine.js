@@ -8,8 +8,6 @@
     , hasOwn = Object.prototype.hasOwnProperty
     , n = null
     , slice = ap.slice
-    , nativ = 'map' in ap
-    , nativ18 = 'reduce' in ap
 
   var iters = {
     each: function (a, fn, scope) {
