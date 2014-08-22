@@ -450,6 +450,7 @@
 
   , throttle: function throttle(wait, fn, opt_scope, head) {
       var timeout
+      var origHead = head
       return function throttler() {
         var context = opt_scope || this
           , args = arguments
@@ -462,6 +463,7 @@
           timeout = setTimeout(function throttleTimeout() {
               fn.apply(context, args)
               timeout = null
+              head = origHead
             },
             wait
           )
