@@ -454,11 +454,16 @@
       return caller
     }
 
-  , throttle: function throttle(wait, fn, opt_scope) {
+  , throttle: function throttle(wait, fn, opt_scope, head) {
       var timeout
       return function throttler() {
         var context = opt_scope || this
           , args = arguments
+        if (head) {
+          fn.apply(context, args)
+          head = false
+          return
+        }
         if (!timeout) {
           timeout = setTimeout(function throttleTimeout() {
               fn.apply(context, args)
