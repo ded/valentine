@@ -1,7 +1,7 @@
 {
   "name": "valentine",
   "description": "JavaScript’s Functional Sister. Utilitiy, Iterators, type checking",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "homepage": "https://github.com/ded/valentine",
   "author": "Dustin Diaz <dustin@dustindiaz.com> (http://dustindiaz.com)",
   "keywords": [
