@@ -4,6 +4,7 @@
   "version": "2.1.3",
   "homepage": "https://github.com/ded/valentine",
   "author": "Dustin Diaz <dustin@dustindiaz.com> (http://dustindiaz.com)",
+  "license": "MIT",
   "keywords": [
     "ender",
     "functional",
